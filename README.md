@@ -1,2 +1,3 @@
 # java-shareit
-Template repository for Shareit project.
+Доработка функионала согласно ТЗ спринта 14.
+Выполнил Олег Лазаренко.

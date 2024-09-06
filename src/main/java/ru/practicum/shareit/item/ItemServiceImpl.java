@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Класс ItemServiceImpl реализует интерфейс ItemService и предоставляет
+ * Класс ItemServiceImpl предоставляет
  * методы для работы с предметами.
  */
 @Service

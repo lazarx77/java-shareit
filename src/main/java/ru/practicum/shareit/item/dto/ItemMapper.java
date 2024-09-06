@@ -7,21 +7,6 @@ import ru.practicum.shareit.item.model.Item;
  * между различными представлениями данных, такими как {@link Item} и {@link ItemDto}.
  * Этот класс служит для упрощения процесса маппинга данных, позволяя избежать дублирования
  * кода и обеспечивая чистоту архитектуры приложения.
- *
- * <p>Класс содержит следующие методы:</p>
- *
- * <ul>
- *     <li>
- *         {@link #mapToDto(Item)} - преобразует объект типа {@link Item} в объект типа {@link ItemDto}.
- *     </li>
- *     <li>
- *         {@link #mapToItem(ItemDto)} - преобразует объект типа {@link ItemDto} в объект типа {@link Item}.
- *     </li>
- *     <li>
- *         {@link #mapToDtoOwner(Item)} - преобразует объект типа {@link Item} в объект типа {@link ItemOwnerDto},
- *         который содержит информацию о предмете для владельца.
- *     </li>
- * </ul>
  */
 public class ItemMapper {
 

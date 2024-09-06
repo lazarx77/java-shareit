@@ -15,9 +15,6 @@ import lombok.NoArgsConstructor;
  *     <li><b>name</b> - имя пользователя;</li>
  *     <li><b>email</b> - адрес электронной почты пользователя;</li>
  * </ul>
- *
- * <p>Класс использует аннотации {@link AllArgsConstructor}, {@link NoArgsConstructor} и {@link Data}
- * из библиотеки Lombok для автоматической генерации конструкторов и методов доступа.</p>
  */
 @Data
 @AllArgsConstructor

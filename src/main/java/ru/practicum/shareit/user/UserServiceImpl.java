@@ -51,13 +51,7 @@ public class UserServiceImpl implements UserService {
     public User update(Long id, User updatedUser) {
         UserValidatorService.validateId(id);
         log.info("Обновление пользователя с id: {} ", id);
-        return userRepository.findById(id)
-                .map(existingUser -> {
-                    UserValidatorService.validateEmailDouble(updatedUser, userRepository.getAll().stream().toList());
-                    updatedUser.setId(id);
-                    return userRepository.update(updatedUser);
-                })
-                .orElseThrow(() -> new NotFoundException("Пользователь с таким id = " + id + " не существует"));
+        return userRepository.update(id, updatedUser);
     }
 
     /**

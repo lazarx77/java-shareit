@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * Класс InMemoryItemRepository реализует интерфейс ItemRepository и предоставляет
+ * Класс InMemoryItemRepository предоставляет
  * методы для работы с предметами в памяти.
  */
 @Repository

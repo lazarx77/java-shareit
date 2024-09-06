@@ -10,8 +10,8 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * Класс InMemoryUserRepository реализует интерфейс UserRepository
- * и предоставляет функциональность для хранения пользователей в памяти
+ * Класс InMemoryUserRepository
+ * предоставляет функциональность для хранения пользователей в памяти
  * с использованием HashMap.
  *
  * <p>Этот класс предназначен для использования в качестве временного хранилища
@@ -46,11 +46,20 @@ public class InMemoryUserRepository implements UserRepository {
      * {@inheritDoc}
      */
     @Override
-    public User update(User updatedUser) {
-        if (!users.containsKey(updatedUser.getId())) {
+    public User update(Long id, User updatedUser) {
+        if (!users.containsKey(id)) {
             throw new NotFoundException("Пользователь с таким id = " + updatedUser.getId() + " не существует");
         }
-        users.put(updatedUser.getId(), updatedUser);
+        updatedUser.setId(id);
+        if (updatedUser.getEmail() != null) {
+            UserValidatorService.validateEmailDouble(updatedUser, users.values().stream().toList());
+        } else {
+            updatedUser.setEmail(users.get(id).getEmail());
+        }
+        if (updatedUser.getName() == null) {
+            updatedUser.setName(users.get(id).getName());
+        }
+        users.put(id, updatedUser);
         return updatedUser;
     }
 

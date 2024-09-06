@@ -30,11 +30,12 @@ public interface UserRepository {
     /**
      * Обновляет информацию о существующем пользователе.
      *
+     * @param id          Уникальный идентификатор пользователя, которого необходимо обновить.
      * @param updatedUser Объект пользователя с обновленными данными.
      * @return Обновленный объект пользователя.
      * @throws IllegalArgumentException если пользователь с указанным идентификатором не найден.
      */
-    User update(User updatedUser);
+    User update(Long id, User updatedUser);
 
     /**
      * Находит пользователя по его уникальному идентификатору.

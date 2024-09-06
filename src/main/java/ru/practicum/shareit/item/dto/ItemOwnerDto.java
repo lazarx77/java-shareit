@@ -15,9 +15,6 @@ import lombok.NoArgsConstructor;
  *     <li><b>name</b> - название предмета;</li>
  *     <li><b>description</b> - описание предмета;</li>
  * </ul>
- *
- * <p>Класс использует аннотации {@link AllArgsConstructor}, {@link NoArgsConstructor} и {@link Data}
- * из библиотеки Lombok для автоматической генерации конструкторов и методов доступа.</p>
  */
 @AllArgsConstructor
 @NoArgsConstructor

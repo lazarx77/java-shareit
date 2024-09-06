@@ -22,10 +22,6 @@ import ru.practicum.shareit.user.model.User;
  *     <li><b>request</b> - объект типа {@link ItemRequest}, представляющий запрос на предмет (если применимо).</li>
  * </ul>
  *
- * <p>Класс использует аннотации {@link Data}, {@link AllArgsConstructor}, {@link NoArgsConstructor}
- * и {@link EqualsAndHashCode} из библиотеки Lombok для автоматической генерации методов доступа,
- * конструкторов и методов сравнения.</p>
- *
  * <p>Метод {@code isAvailable()} возвращает статус доступности предмета.</p>
  */
 @Data

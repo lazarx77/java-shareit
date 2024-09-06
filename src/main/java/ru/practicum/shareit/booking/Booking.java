@@ -26,9 +26,6 @@ import java.time.LocalDateTime;
  *     бронирование.</li>
  *     <li><strong>status</strong> - статус бронирования, представленный перечислением {@link Status}.</li>
  * </ul>
- *
- * <p>Класс использует аннотации Lombok для автоматической генерации методов доступа,
- * конструкторов и методов сравнения.</p>
  */
 @Data
 @AllArgsConstructor

@@ -7,17 +7,6 @@ import ru.practicum.shareit.user.model.User;
  * между различными представлениями данных, такими как {@link User} и {@link UserDto}.
  * Этот класс служит для упрощения процесса маппинга данных, позволяя избежать дублирования
  * кода и обеспечивая чистоту архитектуры приложения.
- *
- * <p>Класс содержит следующие методы:</p>
- *
- * <ul>
- *     <li>
- *         {@link #mapToDto(User)} - преобразует объект типа {@link User} в объект типа {@link UserDto}.
- *     </li>
- *     <li>
- *         {@link #mapToUser(UserDto)} - преобразует объект типа {@link UserDto} в объект типа {@link User}.
- *     </li>
- * </ul>
  */
 public class UserMapper {
 

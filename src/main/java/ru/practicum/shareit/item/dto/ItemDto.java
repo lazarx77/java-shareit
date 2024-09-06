@@ -20,9 +20,6 @@ import lombok.NoArgsConstructor;
  *     <li><b>available</b> - статус доступности предмета, не может быть пустым (аннотация {@link NotNull});</li>
  * </ul>
  *
- * <p>Класс использует аннотации {@link AllArgsConstructor}, {@link NoArgsConstructor} и {@link Data}
- * из библиотеки Lombok для автоматической генерации конструкторов и методов доступа.</p>
- *
  * <p>Метод {@code isAvailable()} возвращает статус доступности предмета.</p>
  */
 @AllArgsConstructor

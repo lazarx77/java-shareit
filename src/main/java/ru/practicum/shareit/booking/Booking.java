@@ -1,5 +1,6 @@
 package ru.practicum.shareit.booking;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -31,11 +32,28 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
+@Entity
+@Table(name = "bookings")
 public class Booking {
-    private long id;
-    private LocalDateTime start;
-    private LocalDateTime end;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private LocalDateTime startDate;
+
+    @Column(nullable = false)
+    private LocalDateTime endDate;
+
+    @ManyToOne
+    @JoinColumn(name = "item_id", nullable = false)
     private Item item;
+
+    @ManyToOne
+    @JoinColumn(name = "booker_id", nullable = false)
     private User booker;
-    private Status status;
+
+    @Column(nullable = false)
+    private String status;
 }

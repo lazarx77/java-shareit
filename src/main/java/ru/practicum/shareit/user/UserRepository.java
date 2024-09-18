@@ -1,8 +1,11 @@
 package ru.practicum.shareit.user;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
-import java.util.Collection;
 import java.util.Optional;
 
 /**
@@ -10,46 +13,9 @@ import java.util.Optional;
  * Он предоставляет методы для выполнения операций CRUD (создание, чтение, обновление, удаление)
  * над объектами типа User.
  */
-public interface UserRepository {
+public interface UserRepository extends JpaRepository<User, Long> {
 
-    /**
-     * Получает всех пользователей из репозитория.
-     *
-     * @return Коллекция всех пользователей.
-     */
-    Collection<User> getAll();
-
-    /**
-     * Создает нового пользователя в репозитории.
-     *
-     * @param user Объект пользователя, который необходимо создать.
-     * @return Созданный объект пользователя с присвоенным уникальным идентификатором.
-     */
-    User createUser(User user);
-
-    /**
-     * Обновляет информацию о существующем пользователе.
-     *
-     * @param id          Уникальный идентификатор пользователя, которого необходимо обновить.
-     * @param updatedUser Объект пользователя с обновленными данными.
-     * @return Обновленный объект пользователя.
-     * @throws IllegalArgumentException если пользователь с указанным идентификатором не найден.
-     */
-    User update(Long id, User updatedUser);
-
-    /**
-     * Находит пользователя по его уникальному идентификатору.
-     *
-     * @param id Уникальный идентификатор пользователя.
-     * @return Опциональный объект пользователя. Если пользователь не найден, возвращает Optional.empty().
-     */
-    Optional<User> findById(Long id);
-
-    /**
-     * Удаляет пользователя из репозитория по его уникальному идентификатору.
-     *
-     * @param id Уникальный идентификатор пользователя, которого необходимо удалить.
-     * @throws IllegalArgumentException если пользователь с указанным идентификатором не найден.
-     */
-    void delete(Long id);
+    @Query("select u from User u " +
+            "where upper(u.email) like upper(concat(?1, '%'))")
+    Optional<User> findUserByEmail(String email);
 }

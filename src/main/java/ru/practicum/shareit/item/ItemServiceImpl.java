@@ -3,13 +3,14 @@ package ru.practicum.shareit.item;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.exception.ItemDoNotBelongToUser;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemMapper;
-import ru.practicum.shareit.item.dto.ItemOwnerDto;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.user.UserRepository;
+import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.UserValidatorService;
+import ru.practicum.shareit.user.model.User;
 
 import java.util.Collections;
 import java.util.List;
@@ -23,7 +24,7 @@ import java.util.List;
 @Slf4j
 public class ItemServiceImpl implements ItemService {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final ItemRepository itemRepository;
 
     /**
@@ -33,10 +34,12 @@ public class ItemServiceImpl implements ItemService {
     public Item addNewItem(Long userId, ItemDto dto) {
         UserValidatorService.validateId(userId);
         log.info("Проверка на наличие пользователя с id: {} ", userId);
-        userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("Пользователь c id: " + userId + " не найден"));
-        log.info("Сохраняем вещь с id: {} ", userId);
-        return itemRepository.addNewItem(userId, dto);
+        User user = userService.findUserById(userId);
+        log.info("Сохраняем вещь с id пользователя: {} ", userId);
+        Item item = ItemMapper.mapToItem(dto);
+        item.setOwner(user);
+
+        return itemRepository.save(item);
     }
 
     /**
@@ -47,43 +50,58 @@ public class ItemServiceImpl implements ItemService {
         UserValidatorService.validateId(userId);
         ItemValidatorService.validateId(itemId);
         log.info("Проверка на наличие пользователя с id: {} ", userId);
-        userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("Пользователь c id: " + userId + " не найден"));
+        User user = userService.findUserById(userId);
         log.info("Обновление вещи с id: {} ", itemId);
-        return itemRepository.updateItem(userId, itemId, dto);
+
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new NotFoundException("Вещь с id = " + itemId + " не найдена"));
+        if (!item.getOwner().getId().equals(userId)) {
+            throw new ItemDoNotBelongToUser("Вещь с id = " + itemId + " не принадлежит пользователю с id = " + userId);
+        }
+        if (dto.getName() != null) {
+            item.setName(dto.getName());
+        }
+        if (dto.getDescription() != null) {
+            item.setDescription(dto.getDescription());
+        }
+        if (dto.isAvailable() != null) {
+            item.setAvailable(dto.isAvailable());
+        }
+        return itemRepository.save(item);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public ItemDto getItemDtoById(Long itemId) {
+    public Item getItem(Long itemId) {
         ItemValidatorService.validateId(itemId);
-        return ItemMapper.mapToDto(itemRepository.findById(itemId)
-                .orElseThrow(() -> new NotFoundException("Вещь с id = " + itemId + " не найдена")));
+        return itemRepository.findById(itemId)
+                .orElseThrow(() -> new NotFoundException("Вещь с id = " + itemId + " не найдена"));
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public List<ItemOwnerDto> getAllItemsOfOwner(Long userId) {
+    public List<Item> getAllItemsOfOwner(Long userId) {
         UserValidatorService.validateId(userId);
-        return itemRepository.findByOwnerId(userId).stream().map(ItemMapper::mapToDtoOwner).toList();
+        return itemRepository.findByOwnerId(userId);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public List<ItemDto> searchItems(String text) {
+    public List<Item> searchItems(String text) {
         if (text == null || text.isBlank()) {
             return Collections.emptyList();
         }
-        return itemRepository.findAll().stream()
-                .filter(item -> item.isAvailable()
-                        && ((item.getName().toLowerCase().contains(text.toLowerCase())) ||
-                        (item.getDescription().toLowerCase().contains(text.toLowerCase()))))
-                .map(ItemMapper::mapToDto).toList();
+        return itemRepository.search(text).stream().filter(Item::isAvailable).toList();
+//        return itemRepository.findAllItems().stream()
+//                .filter(item -> item.isAvailable()
+//                        && ((item.getName().toLowerCase().contains(text.toLowerCase())) ||
+//                        (item.getDescription().toLowerCase().contains(text.toLowerCase()))))
+//                .map(ItemMapper::mapToDto).toList();
     }
 }

@@ -4,8 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.dto.UserMapper;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.List;
@@ -30,45 +28,58 @@ public class UserServiceImpl implements UserService {
      * {@inheritDoc}
      */
     @Override
-    public List<UserDto> getAll() {
-        return userRepository.getAll().stream().map(UserMapper::mapToDto).toList();
+    public List<User> findAllUsers() {
+        return userRepository.findAll();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public User createUser(User user) {
-        UserValidatorService.validateEmailDouble(user, userRepository.getAll().stream().toList());
+    public User addUser(User user) {
+        UserValidatorService.checkEmailIsUnique(userRepository.findUserByEmail(user.getEmail()));
         log.info("Создание пользователя: {} ", user.getName());
-        return userRepository.createUser(user);
+        return userRepository.save(user);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public User update(Long id, User updatedUser) {
+    public User updateUser(Long id, User updatedUser) {
         UserValidatorService.validateId(id);
         log.info("Обновление пользователя с id: {} ", id);
-        return userRepository.update(id, updatedUser);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public UserDto findById(Long id) {
-        return UserMapper.mapToDto(userRepository
+        User user = userRepository
                 .findById(id)
-                .orElseThrow(() -> new NotFoundException("Пользователь с таким id = " + id + " не существует")));
+                .orElseThrow(() -> new NotFoundException("Пользователь с таким id = "
+                        + updatedUser.getId() + " не существует"));
+        updatedUser.setId(id);
+        if (updatedUser.getEmail() != null) {
+            UserValidatorService.checkEmailIsUnique(userRepository.findUserByEmail(updatedUser.getEmail()));
+        } else {
+            updatedUser.setEmail(user.getEmail());
+        }
+        if (updatedUser.getName() == null) {
+            updatedUser.setName(user.getName());
+        }
+        return userRepository.save(updatedUser);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void delete(Long id) {
-        userRepository.delete(id);
+    public User findUserById(Long id) {
+        return userRepository
+                .findById(id)
+                .orElseThrow(() -> new NotFoundException("Пользователь с таким id = " + id + " не существует"));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
     }
 }

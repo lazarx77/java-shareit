@@ -5,7 +5,7 @@ import ru.practicum.shareit.exception.EmailDoubleException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.user.model.User;
 
-import java.util.List;
+import java.util.Optional;
 
 /**
  * Сервис UserValidatorService предоставляет методы для валидации данных пользователей.
@@ -30,15 +30,13 @@ public class UserValidatorService {
     /**
      * Проверяет уникальность электронной почты пользователя.
      *
-     * @param sourceUser Объект пользователя, чья электронная почта проверяется.
-     * @param users      Список всех пользователей для проверки на дублирование электронной почты.
+     * @param user      Optional пользователя для проверки на дублирование электронной почты.
      * @throws EmailDoubleException если электронная почта уже используется другим пользователем.
      */
-    public static void validateEmailDouble(User sourceUser, List<User> users) {
-        for (User currentUser : users) {
-            if (currentUser.getEmail().equals(sourceUser.getEmail())) {
-                throw new EmailDoubleException("Email должен быть уникальным");
-            }
+    public static void checkEmailIsUnique(Optional<User> user) {
+        if (user.isPresent()) {
+            throw new EmailDoubleException("Email должен быть уникальным");
         }
+
     }
 }

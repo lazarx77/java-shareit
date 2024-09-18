@@ -39,7 +39,7 @@ public interface ItemService {
      * @param id идентификатор предмета, который необходимо получить.
      * @return объект типа {@link ItemDto}, содержащий данные о предмете.
      */
-    ItemDto getItemDtoById(Long id);
+    Item getItem(Long id);
 
     /**
      * Получает все предметы, принадлежащие указанному владельцу.
@@ -47,7 +47,7 @@ public interface ItemService {
      * @param userId идентификатор владельца, чьи предметы необходимо получить.
      * @return список объектов типа {@link ItemOwnerDto}, содержащих данные о предметах владельца.
      */
-    List<ItemOwnerDto> getAllItemsOfOwner(Long userId);
+    List<Item> getAllItemsOfOwner(Long userId);
 
     /**
      * Ищет предметы по текстовому запросу.
@@ -55,5 +55,5 @@ public interface ItemService {
      * @param text текст для поиска предметов.
      * @return список объектов типа {@link ItemDto}, соответствующих критериям поиска.
      */
-    List<ItemDto> searchItems(String text);
+    List<Item> searchItems(String text);
 }

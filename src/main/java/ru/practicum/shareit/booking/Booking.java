@@ -55,5 +55,6 @@ public class Booking {
     private User booker;
 
     @Column(nullable = false)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private Status status;
 }

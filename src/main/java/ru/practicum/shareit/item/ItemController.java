@@ -3,6 +3,7 @@ package ru.practicum.shareit.item;
 import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.booking.BookingService;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemMapper;
 import ru.practicum.shareit.item.dto.ItemOwnerDto;
@@ -22,6 +23,7 @@ import java.util.List;
 public class ItemController {
 
     private final ItemService itemService;
+    private final BookingService bookingService;
 
     /**
      * Обрабатывает POST-запрос для добавления нового предмета.
@@ -70,7 +72,8 @@ public class ItemController {
      */
     @GetMapping
     public List<ItemOwnerDto> getAllItemsOfOwner(@RequestHeader("X-Sharer-User-Id") Long userId) {
-        return itemService.getAllItemsOfOwner(userId).stream().map(ItemMapper::mapToDtoOwner).toList();
+        return itemService.getAllItemsOfOwner(userId).stream()
+                .map(item -> ItemMapper.mapToDtoOwner(item, bookingService)).toList();
     }
 
     /**

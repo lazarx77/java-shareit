@@ -1,6 +1,12 @@
 package ru.practicum.shareit.item.dto;
 
+import lombok.AllArgsConstructor;
+import ru.practicum.shareit.booking.Booking;
+import ru.practicum.shareit.booking.BookingRepository;
+import ru.practicum.shareit.booking.BookingService;
 import ru.practicum.shareit.item.model.Item;
+
+import java.time.LocalDateTime;
 
 /**
  * Класс ItemMapper предоставляет статические методы для преобразования объектов
@@ -52,10 +58,10 @@ public class ItemMapper {
      * @param item объект типа {@link Item}, который необходимо преобразовать.
      * @return объект типа {@link ItemOwnerDto}, содержащий название и описание предмета.
      */
-    public static ItemOwnerDto mapToDtoOwner(Item item) {
+    public static ItemOwnerDto mapToDtoOwner(Item item, BookingService bookingService) {
         return new ItemOwnerDto(
                 item.getName(),
-                item.getDescription()
+                item.getDescription(), bookingService.lastDates(item.getId()),bookingService.futureDates(item.getId())
         );
     }
 }

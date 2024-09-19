@@ -50,7 +50,7 @@ public class ItemServiceImpl implements ItemService {
         UserValidatorService.validateId(userId);
         ItemValidatorService.validateId(itemId);
         log.info("Проверка на наличие пользователя с id: {} ", userId);
-        User user = userService.findUserById(userId);
+        userService.findUserById(userId);
         log.info("Обновление вещи с id: {} ", itemId);
 
         Item item = itemRepository.findById(itemId)
@@ -98,10 +98,5 @@ public class ItemServiceImpl implements ItemService {
             return Collections.emptyList();
         }
         return itemRepository.search(text).stream().filter(Item::isAvailable).toList();
-//        return itemRepository.findAllItems().stream()
-//                .filter(item -> item.isAvailable()
-//                        && ((item.getName().toLowerCase().contains(text.toLowerCase())) ||
-//                        (item.getDescription().toLowerCase().contains(text.toLowerCase()))))
-//                .map(ItemMapper::mapToDto).toList();
     }
 }

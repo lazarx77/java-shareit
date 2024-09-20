@@ -1,12 +1,9 @@
 package ru.practicum.shareit.item.dto;
 
-import lombok.AllArgsConstructor;
 import ru.practicum.shareit.booking.Booking;
-import ru.practicum.shareit.booking.BookingRepository;
 import ru.practicum.shareit.booking.BookingService;
+import ru.practicum.shareit.booking.dto.BookingMapper;
 import ru.practicum.shareit.item.model.Item;
-
-import java.time.LocalDateTime;
 
 /**
  * Класс ItemMapper предоставляет статические методы для преобразования объектов
@@ -59,9 +56,17 @@ public class ItemMapper {
      * @return объект типа {@link ItemOwnerDto}, содержащий название и описание предмета.
      */
     public static ItemOwnerDto mapToDtoOwner(Item item, BookingService bookingService) {
-        return new ItemOwnerDto(
-                item.getName(),
-                item.getDescription(), bookingService.lastDates(item.getId()),bookingService.futureDates(item.getId())
-        );
+        ItemOwnerDto dto = new ItemOwnerDto();
+        dto.setName(item.getName());
+        dto.setDescription(item.getDescription());
+        Booking lastBooking = bookingService.findLastBooking(item);
+        Booking futureBooking = bookingService.findFutureBooking(item);
+        if (lastBooking != null) {
+            dto.setLastBooking(BookingMapper.mapToItemBookingDto(lastBooking));
+        }
+        if (futureBooking != null) {
+            dto.setFutureBooking(BookingMapper.mapToItemBookingDto(futureBooking));
+        }
+        return dto;
     }
 }

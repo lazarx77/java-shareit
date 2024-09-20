@@ -3,9 +3,9 @@ package ru.practicum.shareit.item.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.practicum.shareit.booking.dto.BookingInItemDto;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -20,12 +20,11 @@ import java.util.Set;
  *     <li><b>description</b> - описание предмета;</li>
  * </ul>
  */
-@AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class ItemOwnerDto {
     private String name;
     private String description;
-    private Set<LocalDateTime> lastBooking;
-    private Set<LocalDateTime> futureBooking;
+    private BookingInItemDto lastBooking;
+    private BookingInItemDto futureBooking;
 }

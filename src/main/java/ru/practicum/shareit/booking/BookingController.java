@@ -1,8 +1,10 @@
 package ru.practicum.shareit.booking;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.booking.dto.BookingAddDto;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingMapper;
 import ru.practicum.shareit.booking.dto.State;
@@ -17,12 +19,14 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/bookings")
 @AllArgsConstructor
+@Slf4j
 public class BookingController {
 
     BookingService bookingService;
 
     @PostMapping
-    public Booking add(@RequestHeader("X-Sharer-User-Id") Long userId, @Validated @RequestBody BookingDto dto) {
+    public Booking add(@RequestHeader("X-Sharer-User-Id") Long userId, @Validated @RequestBody BookingAddDto dto) {
+//        log.info("В контроллер зашел dto=" + dto);
         return bookingService.addBooking(dto, userId);
     }
 

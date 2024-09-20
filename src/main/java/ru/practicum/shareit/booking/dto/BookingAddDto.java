@@ -4,7 +4,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.booking.Status;
-import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
@@ -12,10 +11,9 @@ import java.time.LocalDateTime;
 /**
  * TODO Sprint add-bookings.
  */
-//@AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class BookingDto {
+public class BookingAddDto {
     Long id;
 
     @NotNull(message = "Время начала бронирования не может быть null")
@@ -24,8 +22,8 @@ public class BookingDto {
     @NotNull(message = "Время окончания бронирования не может быть null")
     private LocalDateTime end;
 
-//    @NotNull(message = "Бронируемую вещь необходимо указать")
-    private Item item;
+    @NotNull(message = "Бронируемую вещь необходимо указать")
+    private Long itemId;
 
     private User booker;
 

@@ -6,10 +6,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.practicum.shareit.exception.EmailDoubleException;
-import ru.practicum.shareit.exception.ItemDoNotBelongToUser;
-import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.exception.ValidationException;
+import ru.practicum.shareit.exception.*;
 
 import java.util.Map;
 
@@ -34,15 +31,25 @@ public class ErrorHandler {
      * @param e исключение, связанное с ошибкой валидации
      * @return карта с сообщением об ошибке и описанием
      */
-    @ExceptionHandler({MethodArgumentNotValidException.class, ValidationException.class})
+    @ExceptionHandler({MethodArgumentNotValidException.class, ValidationException.class, NotAvailableException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, String> handleValidationException(final ValidationException e) {
+    public Map<String, String> handleValidationException(final Exception e) {
         log.error("Ошибка валидации данных: {}.", e.getMessage());
         return Map.of(
                 "error", "Ошибка валидации данных",
                 "description", e.getMessage()
         );
     }
+
+//    @ExceptionHandler(NotAvailableException.class)
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    public Map<String, String> handleNotAvailableException(final NotAvailableException e) {
+//        log.error("Ошибка доступности вещи для бронирования: {}.", e.getMessage());
+//        return Map.of(
+//                "error", "Ошибка доступности вещи для бронирования",
+//                "description", e.getMessage()
+//        );
+//    }
 
     /**
      * Обрабатывает исключение {@link NotFoundException}, которое возникает, когда
@@ -103,11 +110,11 @@ public class ErrorHandler {
      * @return карта с сообщением об ошибке и описанием
      */
     @ExceptionHandler(ItemDoNotBelongToUser.class)
-    @ResponseStatus(HttpStatus.CONFLICT)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
     public Map<String, String> handleItemDoNotBelongToUser(final ItemDoNotBelongToUser e) {
-        log.error("Ошибка при обновлении вещи: {}.", e.getMessage());
+        log.error("Ошибка - для текущего пользователя в доступе отказано: {}.", e.getMessage());
         return Map.of(
-                "error", "Ошибка при обновлении вещи",
+                "error", "Ошибка - для текущего пользователя в доступе отказано",
                 "description", e.getMessage()
         );
     }

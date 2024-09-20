@@ -3,20 +3,20 @@ package ru.practicum.shareit.booking;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.booking.dto.BookingDto;
+import ru.practicum.shareit.booking.dto.BookingAddDto;
 import ru.practicum.shareit.booking.dto.BookingMapper;
 import ru.practicum.shareit.booking.dto.State;
 import ru.practicum.shareit.exception.ItemDoNotBelongToUser;
+import ru.practicum.shareit.exception.NotAvailableException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.ItemService;
+import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.UserValidatorService;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -27,11 +27,18 @@ public class BookingServiceImpl implements BookingService {
     UserService userService;
     ItemService itemService;
 
-    public Booking addBooking(BookingDto dto, Long userId) {
+    public Booking addBooking(BookingAddDto dto, Long userId) {
         log.info("Запуск записи бронирования");
         UserValidatorService.validateId(userId);
+        log.info("Проверка наличия пользователя в БД");
+        userService.findUserById(userId);
+        BookingValidatorService.timeCheck(dto);
+        Item item = itemService.getItem(dto.getItemId());
+        if (!item.isAvailable()) {
+            throw new NotAvailableException("Вещь с id= " + item.getId() + " недоступна для бронирования");
+        }
         dto.setBooker(userService.findUserById(userId));
-        Booking booking = BookingMapper.mapToBooking(dto);
+        Booking booking = BookingMapper.mapToBookingFromAddDto(dto, itemService);
         booking.setStatus(Status.WAITING);
         return bookingRepository.save(booking);
     }
@@ -46,10 +53,11 @@ public class BookingServiceImpl implements BookingService {
         }
         log.info("Проверка наличия бронирования с id= " + id);
         Booking booking = bookingRepository
-                .findById(id).orElseThrow(() -> new NotFoundException("Бронировение с id " + id + "не существует"));
+                .findById(id).orElseThrow(() -> new NotFoundException("Бронировение с id " + id + " не существует"));
         log.info("Проверка владельца бронируемой вещи");
-        if (!booking.getItem().getOwner().getId().equals(userId)) {
-            throw new ItemDoNotBelongToUser("Пользователь с id " + userId + "не является владельнем бронируемой вещи");
+        if (!booking.getItem().getOwner().getId()
+                .equals(userId)) {
+            throw new ItemDoNotBelongToUser("Пользователь с id " + userId + " не является владельнем бронируемой вещи");
         }
         booking.setStatus(approved ? Status.APPROVED : Status.REJECTED);
         return bookingRepository.save(booking);
@@ -58,69 +66,79 @@ public class BookingServiceImpl implements BookingService {
     public Booking findSpecificBooking(Long id, Long userId) {
         BookingValidatorService.validateId(id);
         UserValidatorService.validateId(userId);
-        return bookingRepository.findByBooker_idOrItemOwner_id(id, userId)
-                .orElseThrow(() -> new NotFoundException("Такое бронирование не существует"));
+        Booking booking = bookingRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Такая бронь не найдена"));
+        if (booking.getBooker().getId().equals(userId) || booking.getItem().getOwner().getId().equals(userId)) {
+            return booking;
+        } else {
+            throw new ItemDoNotBelongToUser("Такой брони не существует для данного пользователя");
+        }
     }
 
     public List<Booking> findAllBookingsOfBooker(Long userId, State state) {
         UserValidatorService.validateId(userId);
-        return switch (state) {
-            case ALL -> bookingRepository.findAllBookingsByBooker_idOrderByStartDateDesc(userId);
-            case CURRENT -> bookingRepository
-                    .findAllByBooker_IdAndStartDateBeforeAndEndDateAfterOrderByStartDateDesc(userId,
+        log.info("Проверка наличия пользователя в БД при получении списка всех бронирований");
+        userService.findUserById(userId);
+        log.info("STATE " + state);
+        List<Booking> bookingList;
+        switch (state) {
+            case ALL -> bookingList = bookingRepository.findAllBookingsByBooker_idOrderByStartDesc(userId);
+            case CURRENT -> bookingList = bookingRepository
+                    .findAllByBooker_idAndStartBeforeAndEndAfterOrderByStartDesc(userId,
                             LocalDateTime.now(), LocalDateTime.now());
-            case PAST -> bookingRepository
-                    .findAllByBooker_idAndEndDateAfterOrderByStartDateDesc(userId, LocalDateTime.now());
-            case FUTURE -> bookingRepository
-                    .findAllByBooker_idAndStartDateAfterOrderByStartDateDesc(userId, LocalDateTime.now());
+            case PAST -> bookingList = bookingRepository
+                    .findAllByBooker_idAndEndAfterOrderByStartDesc(userId, LocalDateTime.now());
+            case FUTURE -> bookingList = bookingRepository
+                    .findAllByBooker_idAndStartAfterOrderByStartDesc(userId, LocalDateTime.now());
             case WAITING ->
-                    bookingRepository.findAllByBooker_idAndStatusOrderByStartDateDesc(userId, Status.WAITING);
+                    bookingList = bookingRepository.findAllByBooker_idAndStatusOrderByStartDesc(userId, Status.WAITING);
             case REJECTED ->
-                    bookingRepository.findAllByBooker_idAndStatusOrderByStartDateDesc(userId, Status.REJECTED);
-            default -> throw new IllegalArgumentException("Unknown state: " + state);
-        };
+                    bookingList = bookingRepository.findAllByBooker_idAndStatusOrderByStartDesc(userId, Status.REJECTED);
+            default -> throw new IllegalArgumentException("Неизвестное состояние: " + state);
+        }
+        if (bookingList.isEmpty()) {
+            throw new ItemDoNotBelongToUser("Брони не существует для данного пользователя");
+        }
+        return bookingList;
     }
 
     public List<Booking> findAllBookingsOfOwner(Long userId, State state) {
         UserValidatorService.validateId(userId);
-        return switch (state) {
-            case ALL -> bookingRepository.findAllByItem_Owner_idOrderByStartDateDesc(userId);
-            case CURRENT -> bookingRepository
-                    .findAllByItem_Owner_idAndStartDateBeforeAndEndDateAfterOrderByStartDateDesc(userId,
+        List<Booking> bookingList;
+        switch (state) {
+            case ALL -> bookingList = bookingRepository.findAllByItem_Owner_idOrderByStartDesc(userId);
+            case CURRENT -> bookingList = bookingRepository
+                    .findAllByItem_Owner_idAndStartBeforeAndEndAfterOrderByStartDesc(userId,
                             LocalDateTime.now(), LocalDateTime.now());
-            case PAST -> bookingRepository
-                    .findAllByItem_Owner_idAndEndDateAfterOrderByStartDateDesc(userId, LocalDateTime.now());
-            case FUTURE -> bookingRepository
-                    .findAllByItem_Owner_idAndStartDateAfterOrderByStartDateDesc(userId, LocalDateTime.now());
-            case WAITING -> bookingRepository
-                    .findAllByItem_Owner_idAndStatusOrderByStartDateDesc(userId, Status.WAITING);
-            case REJECTED -> bookingRepository
-                    .findAllByItem_Owner_idAndStatusOrderByStartDateDesc(userId, Status.REJECTED);
-            default -> throw new IllegalArgumentException("Unknown state: " + state);
-        };
+            case PAST -> bookingList = bookingRepository
+                    .findAllByItem_Owner_idAndEndAfterOrderByStartDesc(userId, LocalDateTime.now());
+            case FUTURE -> bookingList = bookingRepository
+                    .findAllByItem_Owner_idAndStartAfterOrderByStartDesc(userId, LocalDateTime.now());
+            case WAITING -> bookingList = bookingRepository
+                    .findAllByItem_Owner_idAndStatusOrderByStartDesc(userId, Status.WAITING);
+            case REJECTED -> bookingList = bookingRepository
+                    .findAllByItem_Owner_idAndStatusOrderByStartDesc(userId, Status.REJECTED);
+            default -> throw new IllegalArgumentException("Неизвестное состояние: " + state);
+        }
+        if (bookingList.isEmpty()) {
+            throw new ItemDoNotBelongToUser("Брони не существует для данного пользователя");
+        }
+        return bookingList;
     }
 
-    public Set<LocalDateTime> lastDates(Long itemId) {
-        Booking lastbooking = bookingRepository
-                .findFirstByItem_Owner_idAndStartDateBeforeOrderByStartDateDesc(itemService
-                        .getItem(itemId)
+    public Booking findLastBooking(Item item) {
+        return bookingRepository
+                .findFirstByItem_Owner_idAndStartBeforeOrderByStartDesc(itemService
+                        .getItem(item.getId())
                         .getOwner()
                         .getId(), LocalDateTime.now())
-                .orElseThrow(() -> new NotFoundException("Такой брони нет"));
-        Set<LocalDateTime> lastTimeSet = new HashSet<>();
-        lastTimeSet.add(lastbooking.getStartDate());
-        lastTimeSet.add(lastbooking.getEndDate());
-        return lastTimeSet;
+                .orElse(null);
     }
 
-    public Set<LocalDateTime> futureDates(Long itemId) {
-        Booking futureBooking = bookingRepository
-                .findFirstByItem_Owner_idAndStartDateAfterOrderByStartDateAsc(itemService
-                        .getItem(itemId).getOwner()
-                        .getId(), LocalDateTime.now()).orElseThrow(() -> new NotFoundException("Такой брони нет"));
-        Set<LocalDateTime> futureTimeSet = new HashSet<>();
-        futureTimeSet.add(futureBooking.getStartDate());
-        futureTimeSet.add(futureBooking.getEndDate());
-        return futureTimeSet;
+    public Booking findFutureBooking(Item item) {
+        return bookingRepository
+                .findFirstByItem_Owner_idAndStartAfterOrderByStartAsc(itemService
+                        .getItem(item.getId()).getOwner()
+                        .getId(), LocalDateTime.now()).orElse(null);
     }
 }

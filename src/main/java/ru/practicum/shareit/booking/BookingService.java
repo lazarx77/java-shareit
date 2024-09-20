@@ -1,15 +1,15 @@
 package ru.practicum.shareit.booking;
 
+import ru.practicum.shareit.booking.dto.BookingAddDto;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.State;
+import ru.practicum.shareit.item.model.Item;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 public interface BookingService {
 
-    Booking addBooking(BookingDto bookingDto, Long userId);
+    Booking addBooking(BookingAddDto bookingDto, Long userId);
 
     Booking changeStatus(Long id, Boolean approved, Long userId);
 
@@ -19,8 +19,8 @@ public interface BookingService {
 
     List<Booking> findAllBookingsOfOwner(Long userId, State state);
 
-    Set<LocalDateTime> lastDates(Long itemId);
+    Booking findLastBooking(Item item);
 
-    public Set<LocalDateTime> futureDates(Long itemId);
+    Booking findFutureBooking(Item item);
 
 }

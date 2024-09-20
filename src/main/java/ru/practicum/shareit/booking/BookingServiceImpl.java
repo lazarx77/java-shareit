@@ -27,13 +27,12 @@ public class BookingServiceImpl implements BookingService {
     UserService userService;
     ItemService itemService;
 
+    @Override
     public Booking addBooking(BookingAddDto dto, Long userId) {
         log.info("Запуск записи бронирования");
         UserValidatorService.validateId(userId);
         log.info("Проверка наличия пользователя в БД");
         userService.findUserById(userId);
-        log.info("Время начала= " + dto.getStart());
-        log.info("Время окончания= " + dto.getEnd());
         BookingValidatorService.timeCheck(dto);
         Item item = itemService.getItem(dto.getItemId());
         if (!item.isAvailable()) {
@@ -45,6 +44,7 @@ public class BookingServiceImpl implements BookingService {
         return bookingRepository.save(booking);
     }
 
+    @Override
     public Booking changeStatus(Long id, Boolean approved, Long userId) {
         log.info("Смена статуса бронирования id= " + id);
         BookingValidatorService.validateId(id);
@@ -65,6 +65,7 @@ public class BookingServiceImpl implements BookingService {
         return bookingRepository.save(booking);
     }
 
+    @Override
     public Booking findSpecificBooking(Long id, Long userId) {
         BookingValidatorService.validateId(id);
         UserValidatorService.validateId(userId);
@@ -77,6 +78,7 @@ public class BookingServiceImpl implements BookingService {
         }
     }
 
+    @Override
     public List<Booking> findAllBookingsOfBooker(Long userId, State state) {
         UserValidatorService.validateId(userId);
         log.info("Проверка наличия пользователя в БД при получении списка всех бронирований");
@@ -104,6 +106,7 @@ public class BookingServiceImpl implements BookingService {
         return bookingList;
     }
 
+    @Override
     public List<Booking> findAllBookingsOfOwner(Long userId, State state) {
         UserValidatorService.validateId(userId);
         List<Booking> bookingList;
@@ -128,6 +131,7 @@ public class BookingServiceImpl implements BookingService {
         return bookingList;
     }
 
+    @Override
     public Booking findLastBooking(Item item) {
         return bookingRepository
                 .findFirstByItem_Owner_idAndStartBeforeOrderByStartDesc(itemService
@@ -137,10 +141,25 @@ public class BookingServiceImpl implements BookingService {
                 .orElse(null);
     }
 
+    @Override
     public Booking findFutureBooking(Item item) {
         return bookingRepository
                 .findFirstByItem_Owner_idAndStartAfterOrderByStartAsc(itemService
                         .getItem(item.getId()).getOwner()
                         .getId(), LocalDateTime.now()).orElse(null);
     }
+
+
+//    private void setCancelledStatus(Booking booking) {
+//        if(booking.getEnd().isBefore(LocalDateTime.now())) {
+//            booking.setStatus(Status.CANCELED);
+//            bookingRepository.save(booking);
+//        }
+//    }
+
+//    public Booking getPastBooking(Long itemId, Long bookerId) {
+//        return bookingRepository
+//                .findByItemIdAndBookerIdAndEndBefore(itemId, bookerId, LocalDateTime.now())
+//                .orElseThrow(() -> new NotFoundException("Такая бронь не найдена"));
+//    }
 }

@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.BookingService;
-import ru.practicum.shareit.item.dto.CommentDto;
-import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemMapper;
-import ru.practicum.shareit.item.dto.ItemOwnerDto;
+import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 
@@ -90,8 +87,8 @@ public class ItemController {
     }
 
     @PostMapping("{itemId}/comment")
-    public Comment addComment(@RequestHeader("X-Sharer-User-Id") Long bookerId, @PathVariable("itemId") Long itemId,
+    public CommentDto addComment(@RequestHeader("X-Sharer-User-Id") Long authorId, @PathVariable("itemId") Long itemId,
                               @RequestBody CommentDto dto) {
-        return itemService.addComment(bookerId, itemId, dto);
+        return CommentMapper.mapToCommentDto(itemService.addComment(authorId, itemId, dto));
     }
 }

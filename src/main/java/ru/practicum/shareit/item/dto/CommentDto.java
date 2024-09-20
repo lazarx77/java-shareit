@@ -9,5 +9,5 @@ public class CommentDto {
 
     String text;
 
-    Long authorId;
+    String authorName;
 }

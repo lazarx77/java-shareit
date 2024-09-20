@@ -2,7 +2,6 @@ package ru.practicum.shareit.booking;
 
 import lombok.extern.slf4j.Slf4j;
 import ru.practicum.shareit.booking.dto.BookingAddDto;
-import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.exception.ValidationException;
 
 import java.time.LocalDateTime;
@@ -28,10 +27,9 @@ public class BookingValidatorService {
     public static void timeCheck(BookingAddDto dto) {
         log.info("Проверка на пересечение времени");
         if (!(dto.getStart().isBefore(dto.getEnd())
-                && dto.getStart().isAfter(LocalDateTime.now())
-//                && dto.getEnd().isAfter(LocalDateTime.now())
-        ))
-        {
+                && (dto.getStart().plusMinutes(1)).isAfter(LocalDateTime.now())
+                && (dto.getEnd().plusMinutes(1)).isAfter(LocalDateTime.now())
+        )) {
             throw new ValidationException("Время начала бронирования должно быть раньше времени окончания, " +
                     "и оба времени не могут быть в прошлом.");
         }

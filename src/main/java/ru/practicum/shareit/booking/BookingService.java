@@ -22,5 +22,5 @@ public interface BookingService {
     Booking findLastBooking(Item item);
 
     Booking findFutureBooking(Item item);
-
+//    Booking getPastBooking(Long itemId, Long bookerId);
 }

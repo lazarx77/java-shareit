@@ -5,10 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.BookingRepository;
-import ru.practicum.shareit.booking.BookingService;
-import ru.practicum.shareit.booking.BookingValidatorService;
+import ru.practicum.shareit.booking.Status;
 import ru.practicum.shareit.exception.ItemDoNotBelongToUser;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemMapper;
@@ -18,6 +18,7 @@ import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.UserValidatorService;
 import ru.practicum.shareit.user.model.User;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -109,16 +110,21 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Comment addComment(Long authorId, Long itemId, CommentDto dto){
+    public Comment addComment(Long authorId, Long itemId, CommentDto dto) {
         log.info("Добавление комментария для вещи с id= " + itemId);
         UserValidatorService.validateId(authorId);
         ItemValidatorService.validateId(itemId);
+        Booking booking = bookingRepository.findByItemIdAndBookerIdAndEndBefore(itemId, authorId, LocalDateTime.now())
+                .orElseThrow(()-> new ValidationException("Бронь с указанными параметрами не существует>"));
+//        Booking booking = bookingRepository.findByItemId(itemId)
+//                .orElseThrow(() -> new NotFoundException("Такая бронь не найдена"));
+//        if (!booking.getBooker().getId().equals(authorId)) {
+//            throw new ItemDoNotBelongToUser("Такой брони не существует для данного пользователя");
+//        }
+//        if (booking.getStatus() == Status.APPROVED) {
+//            throw new ValidationException("Вещь в данный момент забронирована");
+//        }
 
-        Booking booking = bookingRepository.findById(itemId)
-                .orElseThrow(() -> new NotFoundException("Такая бронь не найдена"));
-        if (!booking.getBooker().getId().equals(authorId)) {
-            throw new ItemDoNotBelongToUser("Такой брони не существует для данного пользователя");
-        }
         User booker = booking.getBooker();
         Comment comment = new Comment();
         comment.setItem(booking.getItem());
@@ -129,6 +135,6 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<Comment> getComments(Long itemId) {
-       return commentRepository.findAllByItemId(itemId);
+        return commentRepository.findAllByItemId(itemId);
     }
 }

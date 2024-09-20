@@ -5,6 +5,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.practicum.shareit.booking.dto.BookingInItemDto;
+
+import java.util.List;
 
 /**
  * Класс ItemDto представляет собой Data Transfer Object (DTO) для передачи данных о предмете.
@@ -33,6 +36,11 @@ public class ItemDto {
     private String description;
     @NotNull(message = "Статус доступности не может быть пустым")
     private Boolean available;
+
+    private BookingInItemDto lastBooking;
+    private BookingInItemDto nextBooking;
+
+    private List<CommentDto> comments;
 
     public Boolean isAvailable() {
         return available;

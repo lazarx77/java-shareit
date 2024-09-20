@@ -3,7 +3,10 @@ package ru.practicum.shareit.item.dto;
 import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.BookingService;
 import ru.practicum.shareit.booking.dto.BookingMapper;
+import ru.practicum.shareit.item.ItemService;
+import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
+import java.util.List;
 
 /**
  * Класс ItemMapper предоставляет статические методы для преобразования объектов
@@ -19,6 +22,27 @@ public class ItemMapper {
      * @param item объект типа {@link Item}, который необходимо преобразовать.
      * @return объект типа {@link ItemDto}, содержащий данные из переданного объекта {@link Item}.
      */
+    public static ItemDto mapToDtoWithComments(Item item, ItemService itemService, BookingService bookingService) {
+        ItemDto dto = new ItemDto();
+        dto.setId(item.getId());
+        dto.setName(item.getName());
+        dto.setDescription(item.getDescription());
+        Booking lastBooking = bookingService.findLastBooking(item);
+        Booking futureBooking = bookingService.findFutureBooking(item);
+        if (lastBooking != null) {
+            dto.setLastBooking(BookingMapper.mapToItemBookingDto(lastBooking));
+        }
+        if (futureBooking != null) {
+            dto.setNextBooking(BookingMapper.mapToItemBookingDto(futureBooking));
+        }
+        if (item.getAvailable() != null) {
+            dto.setAvailable(item.getAvailable());
+        }
+        List<Comment> comments = itemService.getComments(item.getId());
+        dto.setComments(comments.stream().map(CommentMapper::mapToCommentDto).toList());
+        return dto;
+    }
+
     public static ItemDto mapToDto(Item item) {
         ItemDto dto = new ItemDto();
         dto.setId(item.getId());
@@ -55,7 +79,7 @@ public class ItemMapper {
      * @param item объект типа {@link Item}, который необходимо преобразовать.
      * @return объект типа {@link ItemOwnerDto}, содержащий название и описание предмета.
      */
-    public static ItemOwnerDto mapToDtoOwner(Item item, BookingService bookingService) {
+    public static ItemOwnerDto mapToDtoOwner(Item item, BookingService bookingService, ItemService itemService) {
         ItemOwnerDto dto = new ItemOwnerDto();
         dto.setName(item.getName());
         dto.setDescription(item.getDescription());
@@ -65,8 +89,10 @@ public class ItemMapper {
             dto.setLastBooking(BookingMapper.mapToItemBookingDto(lastBooking));
         }
         if (futureBooking != null) {
-            dto.setFutureBooking(BookingMapper.mapToItemBookingDto(futureBooking));
+            dto.setNextBooking(BookingMapper.mapToItemBookingDto(futureBooking));
         }
+        List<Comment> comments = itemService.getComments(item.getId());
+        dto.setComments(comments.stream().map(CommentMapper::mapToCommentDto).toList());
         return dto;
     }
 }

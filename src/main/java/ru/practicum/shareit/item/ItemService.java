@@ -1,7 +1,9 @@
 package ru.practicum.shareit.item;
 
+import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemOwnerDto;
+import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.List;
@@ -56,4 +58,8 @@ public interface ItemService {
      * @return список объектов типа {@link ItemDto}, соответствующих критериям поиска.
      */
     List<Item> searchItems(String text);
+
+    Comment addComment(Long bookerId, Long itemId, CommentDto dto);
+
+    List<Comment> getComments(Long itemId);
 }

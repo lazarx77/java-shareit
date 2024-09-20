@@ -3,10 +3,16 @@ package ru.practicum.shareit.item;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.booking.Booking;
+import ru.practicum.shareit.booking.BookingRepository;
+import ru.practicum.shareit.booking.BookingService;
+import ru.practicum.shareit.booking.BookingValidatorService;
 import ru.practicum.shareit.exception.ItemDoNotBelongToUser;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemMapper;
+import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.UserValidatorService;
@@ -26,6 +32,8 @@ public class ItemServiceImpl implements ItemService {
 
     private final UserService userService;
     private final ItemRepository itemRepository;
+    private final CommentRepository commentRepository;
+    private final BookingRepository bookingRepository;
 
     /**
      * {@inheritDoc}
@@ -98,5 +106,29 @@ public class ItemServiceImpl implements ItemService {
             return Collections.emptyList();
         }
         return itemRepository.search(text).stream().filter(Item::isAvailable).toList();
+    }
+
+    @Override
+    public Comment addComment(Long authorId, Long itemId, CommentDto dto){
+        log.info("Добавление комментария для вещи с id= " + itemId);
+        UserValidatorService.validateId(authorId);
+        ItemValidatorService.validateId(itemId);
+
+        Booking booking = bookingRepository.findById(itemId)
+                .orElseThrow(() -> new NotFoundException("Такая бронь не найдена"));
+        if (!booking.getBooker().getId().equals(authorId)) {
+            throw new ItemDoNotBelongToUser("Такой брони не существует для данного пользователя");
+        }
+        User booker = booking.getBooker();
+        Comment comment = new Comment();
+        comment.setItem(booking.getItem());
+        comment.setAuthor(booker);
+        comment.setText(dto.getText());
+        return commentRepository.save(comment);
+    }
+
+    @Override
+    public List<Comment> getComments(Long itemId) {
+       return commentRepository.findAllByItemId(itemId);
     }
 }

@@ -1,12 +1,10 @@
 package ru.practicum.shareit.item.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.booking.dto.BookingInItemDto;
 
-import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Класс ItemOwnerDto представляет собой Data Transfer Object (DTO) для передачи данных о предмете
@@ -26,5 +24,6 @@ public class ItemOwnerDto {
     private String name;
     private String description;
     private BookingInItemDto lastBooking;
-    private BookingInItemDto futureBooking;
+    private BookingInItemDto nextBooking;
+    private List<CommentDto> comments;
 }

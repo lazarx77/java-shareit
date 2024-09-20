@@ -32,6 +32,8 @@ public class BookingServiceImpl implements BookingService {
         UserValidatorService.validateId(userId);
         log.info("Проверка наличия пользователя в БД");
         userService.findUserById(userId);
+        log.info("Время начала= " + dto.getStart());
+        log.info("Время окончания= " + dto.getEnd());
         BookingValidatorService.timeCheck(dto);
         Item item = itemService.getItem(dto.getItemId());
         if (!item.isAvailable()) {

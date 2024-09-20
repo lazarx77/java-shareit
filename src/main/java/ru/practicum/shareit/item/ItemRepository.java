@@ -2,11 +2,9 @@ package ru.practicum.shareit.item;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Интерфейс ItemRepository определяет контракт для работы с предметами в системе.

@@ -3,8 +3,8 @@ package ru.practicum.shareit.item;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.BookingRepository;
+import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.exception.ItemDoNotBelongToUser;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
@@ -118,7 +118,7 @@ public class ItemServiceImpl implements ItemService {
         UserValidatorService.validateId(authorId);
         ItemValidatorService.validateId(itemId);
         Booking booking = bookingRepository.findByItemIdAndBookerIdAndEndBefore(itemId, authorId, LocalDateTime.now())
-                .orElseThrow(()-> new ValidationException("Бронь с указанными параметрами не существует>"));
+                .orElseThrow(() -> new ValidationException("Бронь с указанными параметрами не существует>"));
         User booker = booking.getBooker();
         Comment comment = new Comment();
         comment.setItem(booking.getItem());

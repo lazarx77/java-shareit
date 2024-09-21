@@ -7,8 +7,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.user.model.User;
 
-import java.time.LocalDateTime;
-
 /**
  * Класс ItemRequest представляет собой модель запроса на предмет в системе.
  * Он содержит информацию о запросе, включая его идентификатор, описание,

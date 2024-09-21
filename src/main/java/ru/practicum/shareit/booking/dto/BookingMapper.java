@@ -52,7 +52,7 @@ public class BookingMapper {
     /**
      * Преобразует объект BookingAddDto в объект Booking.
      *
-     * @param dto объект BookingAddDto, содержащий данные для создания нового бронирования
+     * @param dto         объект BookingAddDto, содержащий данные для создания нового бронирования
      * @param itemService сервис для получения информации о предмете
      * @return объект Booking, созданный на основе данных из BookingAddDto
      */
@@ -72,7 +72,7 @@ public class BookingMapper {
      * @param booking объект бронирования, для которого нужно определить состояние
      * @return состояние бронирования (REJECTED, WAITING, PAST, FUTURE, CURRENT)
      */
-    private static State setState(Booking booking){
+    private static State setState(Booking booking) {
         State state;
         if (booking.getStatus() == Status.REJECTED) {
             state = State.REJECTED;

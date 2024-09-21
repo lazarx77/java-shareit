@@ -43,7 +43,7 @@ public class ItemServiceImpl implements ItemService {
         UserValidatorService.validateId(userId);
         log.info("Проверка на наличие пользователя с id: {} ", userId);
         User user = userService.findUserById(userId);
-        log.info("Сохраняем вещь с id пользователя: {} ", userId);
+        log.info("Сохраняем предмет с id пользователя: {} ", userId);
         Item item = ItemMapper.mapToItem(dto);
         item.setOwner(user);
 
@@ -59,12 +59,13 @@ public class ItemServiceImpl implements ItemService {
         ItemValidatorService.validateId(itemId);
         log.info("Проверка на наличие пользователя с id: {} ", userId);
         userService.findUserById(userId);
-        log.info("Обновление вещи с id: {} ", itemId);
+        log.info("Обновление предмета с id: {} ", itemId);
 
         Item item = itemRepository.findById(itemId)
-                .orElseThrow(() -> new NotFoundException("Вещь с id = " + itemId + " не найдена"));
+                .orElseThrow(() -> new NotFoundException("Предмет с id = " + itemId + " не найден"));
         if (!item.getOwner().getId().equals(userId)) {
-            throw new ItemDoNotBelongToUser("Вещь с id = " + itemId + " не принадлежит пользователю с id = " + userId);
+            throw new ItemDoNotBelongToUser("Предмет с id = " + itemId + " не принадлежит пользователю с id = " +
+                    userId);
         }
         if (dto.getName() != null) {
             item.setName(dto.getName());
@@ -85,7 +86,7 @@ public class ItemServiceImpl implements ItemService {
     public Item getItem(Long itemId) {
         ItemValidatorService.validateId(itemId);
         return itemRepository.findById(itemId)
-                .orElseThrow(() -> new NotFoundException("Вещь с id = " + itemId + " не найдена"));
+                .orElseThrow(() -> new NotFoundException("Предмет с id = " + itemId + " не найден"));
     }
 
     /**
@@ -108,9 +109,12 @@ public class ItemServiceImpl implements ItemService {
         return itemRepository.search(text).stream().filter(Item::isAvailable).toList();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Comment addComment(Long authorId, Long itemId, CommentDto dto) {
-        log.info("Добавление комментария для вещи с id= " + itemId);
+        log.info("Добавление комментария для предмета с id= " + itemId);
         UserValidatorService.validateId(authorId);
         ItemValidatorService.validateId(itemId);
         Booking booking = bookingRepository.findByItemIdAndBookerIdAndEndBefore(itemId, authorId, LocalDateTime.now())
@@ -124,6 +128,9 @@ public class ItemServiceImpl implements ItemService {
         return commentRepository.save(comment);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Comment> getComments(Long itemId) {
         return commentRepository.findAllByItemId(itemId);

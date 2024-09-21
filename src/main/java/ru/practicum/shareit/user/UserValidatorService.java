@@ -37,6 +37,5 @@ public class UserValidatorService {
         if (user.isPresent()) {
             throw new EmailDoubleException("Email должен быть уникальным");
         }
-
     }
 }

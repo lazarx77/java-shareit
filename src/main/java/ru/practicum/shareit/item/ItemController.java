@@ -5,16 +5,13 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.BookingService;
 import ru.practicum.shareit.item.dto.*;
-import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.List;
 
 /**
- * Класс ItemController является контроллером REST, который обрабатывает HTTP-запросы,
- * связанные с предметами в системе. Он предоставляет конечные точки для добавления, обновления,
- * получения и поиска предметов. Контроллер использует сервисный слой для выполнения бизнес-логики
- * и возвращает данные в формате JSON.
+ * Контроллер для управления предметами в системе.
+ * Обрабатывает HTTP-запросы, связанные с предметами, и взаимодействует с сервисами для выполнения операций.
  */
 @RestController
 @RequestMapping("/items")
@@ -24,12 +21,13 @@ public class ItemController {
     private final ItemService itemService;
     private final BookingService bookingService;
 
+
     /**
-     * Обрабатывает POST-запрос для добавления нового предмета.
+     * Добавляет новый предмет.
      *
-     * @param userId идентификатор пользователя, добавляющего предмет.
-     * @param dto    объект типа {@link ItemDto}, содержащий данные о предмете.
-     * @return добавленный объект типа {@link Item}.
+     * @param userId уникальный идентификатор пользователя, добавляющего предмет.
+     * @param dto    объект, содержащий данные о предмете.
+     * @return добавленный предмет.
      */
     @PostMapping
     public Item add(@RequestHeader("X-Sharer-User-Id") Long userId,
@@ -38,12 +36,12 @@ public class ItemController {
     }
 
     /**
-     * Обрабатывает PATCH-запрос для обновления существующего предмета.
+     * Обновляет информацию о существующем предмете.
      *
-     * @param userId идентификатор пользователя, пытающегося обновить предмет.
-     * @param id     идентификатор предмета, который необходимо обновить.
-     * @param dto    объект типа {@link ItemDto}, содержащий новые данные о предмете.
-     * @return обновленный объект типа {@link Item}.
+     * @param userId уникальный идентификатор пользователя, обновляющего предмет.
+     * @param id     уникальный идентификатор предмета, который необходимо обновить.
+     * @param dto    объект, содержащий обновленные данные о предмете.
+     * @return обновленный предмет.
      */
     @PatchMapping("/{itemId}")
     public Item updateItem(@RequestHeader("X-Sharer-User-Id") Long userId,
@@ -53,23 +51,21 @@ public class ItemController {
     }
 
     /**
-     * Обрабатывает GET-запрос для получения предмета по его идентификатору.
+     * Получает информацию о предмете по его идентификатору.
      *
-     * @param id идентификатор предмета, который необходимо получить.
-     * @return объект типа {@link ItemDto}, содержащий данные о предмете.
+     * @param id уникальный идентификатор предмета.
+     * @return объект DTO, содержащий информацию о предмете и его комментариях.
      */
     @GetMapping("/{itemId}")
     public ItemDto getItemDtoById(@PathVariable("itemId") Long id) {
-        return ItemMapper.mapToDtoWithComments(itemService.getItem(id), itemService
-//                , bookingService
-        );
+        return ItemMapper.mapToDtoWithComments(itemService.getItem(id), itemService);
     }
 
     /**
-     * Обрабатывает GET-запрос для получения всех предметов, принадлежащих указанному владельцу.
+     * Получает все предметы, принадлежащие указанному пользователю.
      *
-     * @param userId идентификатор владельца, чьи предметы необходимо получить.
-     * @return список объектов типа {@link ItemOwnerDto}, содержащих данные о предметах владельца.
+     * @param userId уникальный идентификатор пользователя.
+     * @return список объектов DTO, представляющих предметы владельца.
      */
     @GetMapping
     public List<ItemOwnerDto> getAllItemsOfOwner(@RequestHeader("X-Sharer-User-Id") Long userId) {
@@ -78,19 +74,27 @@ public class ItemController {
     }
 
     /**
-     * Обрабатывает GET-запрос для поиска предметов по текстовому запросу.
+     * Ищет предметы по заданному текстовому запросу.
      *
      * @param text текст для поиска предметов.
-     * @return список объектов типа {@link ItemDto}, соответствующих критериям поиска.
+     * @return список объектов DTO, представляющих найденные предметы.
      */
     @GetMapping("/search")
     public List<ItemDto> searchItems(@RequestParam("text") String text) {
         return itemService.searchItems(text).stream().map(ItemMapper::mapToDto).toList();
     }
 
+    /**
+     * Добавляет комментарий к предмету.
+     *
+     * @param authorId уникальный идентификатор пользователя, оставляющего комментарий.
+     * @param itemId   уникальный идентификатор предмета, к которому добавляется комментарий.
+     * @param dto      объект, содержащий данные комментария.
+     * @return объект DTO, представляющий добавленный комментарий.
+     */
     @PostMapping("{itemId}/comment")
     public CommentDto addComment(@RequestHeader("X-Sharer-User-Id") Long authorId, @PathVariable("itemId") Long itemId,
-                              @RequestBody CommentDto dto) {
+                                 @RequestBody CommentDto dto) {
         return CommentMapper.mapToCommentDto(itemService.addComment(authorId, itemId, dto));
     }
 }

@@ -2,7 +2,6 @@ package ru.practicum.shareit.item.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.booking.dto.BookingInItemDto;
@@ -10,34 +9,29 @@ import ru.practicum.shareit.booking.dto.BookingInItemDto;
 import java.util.List;
 
 /**
- * Класс ItemDto представляет собой Data Transfer Object (DTO) для передачи данных о предмете.
- * Он используется для обмена информацией между слоями приложения, например, между контроллерами
- * и сервисами. Класс содержит поля, которые описывают свойства предмета, а также аннотации
- * для валидации входящих данных.
- *
- * <p>Поля класса:</p>
- * <ul>
- *     <li><b>id</b> - уникальный идентификатор предмета;</li>
- *     <li><b>name</b> - название предмета, не может быть пустым (аннотация {@link NotBlank});</li>
- *     <li><b>description</b> - описание предмета, не может быть пустым (аннотация {@link NotBlank});</li>
- *     <li><b>available</b> - статус доступности предмета, не может быть пустым (аннотация {@link NotNull});</li>
- * </ul>
- *
- * <p>Метод {@code isAvailable()} возвращает статус доступности предмета.</p>
+ * DTO (Data Transfer Object) для представления предмета.
+ * <p>
+ * Этот класс используется для передачи данных о предметах, включая
+ * идентификатор, название, описание, статус доступности, информацию о
+ * последнем и следующем бронировании, а также список комментариев.
  */
-@AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class ItemDto {
+
     private Long id;
+
     @NotBlank(message = "Название не может быть пустым")
     private String name;
+
     @NotBlank(message = "Описание не может быть пустым")
     private String description;
+
     @NotNull(message = "Статус доступности не может быть пустым")
     private Boolean available;
 
     private BookingInItemDto lastBooking;
+
     private BookingInItemDto nextBooking;
 
     private List<CommentDto> comments;

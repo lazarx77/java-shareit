@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS bookings (
     CONSTRAINT pk_bookings PRIMARY KEY (id),
     FOREIGN KEY (item_id) REFERENCES items(id) ON DELETE CASCADE,
     FOREIGN KEY (booker_id) REFERENCES users(id) ON DELETE CASCADE,
-    CHECK (start_date < end_date)  -- Ограничение для проверки, что дата начала меньше даты окончания
+    CHECK (start_date < end_date)
 );
 
 -- Создание таблицы comments

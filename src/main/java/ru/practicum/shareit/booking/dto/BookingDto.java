@@ -10,7 +10,11 @@ import ru.practicum.shareit.user.model.User;
 import java.time.LocalDateTime;
 
 /**
- * TODO Sprint add-bookings.
+ * DTO (Data Transfer Object) для представления информации о бронировании.
+ * <p>
+ * Этот класс используется для передачи данных о бронировании между слоями приложения.
+ * Он содержит информацию о времени начала и окончания бронирования, а также о
+ * бронируемом предмете и пользователе, который делает бронирование.
  */
 @NoArgsConstructor
 @Data

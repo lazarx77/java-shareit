@@ -19,6 +19,10 @@ import ru.practicum.shareit.user.UserValidatorService;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Класс BookingServiceImpl предоставляет
+ * методы для работы с бронированием.
+ */
 @Service
 @AllArgsConstructor
 @Slf4j
@@ -28,12 +32,15 @@ public class BookingServiceImpl implements BookingService {
     UserService userService;
     ItemService itemService;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Booking addBooking(BookingAddDto dto, Long userId) {
         BookingValidatorService.timeCheck(dto, LocalDateTime.now());
         log.info("Запуск записи бронирования");
         UserValidatorService.validateId(userId);
-        log.info("Проверка наличия пользователя в БД");
+        log.info("Проверка наличия пользователя в БД id= " + userId);
         userService.findUserById(userId);
         Item item = itemService.getItem(dto.getItemId());
         if (!item.isAvailable()) {
@@ -45,6 +52,9 @@ public class BookingServiceImpl implements BookingService {
         return bookingRepository.save(booking);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Booking changeStatus(Long id, Boolean approved, Long userId) {
         log.info("Смена статуса бронирования id= " + id);
@@ -66,6 +76,9 @@ public class BookingServiceImpl implements BookingService {
         return bookingRepository.save(booking);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Booking findSpecificBooking(Long id, Long userId) {
         BookingValidatorService.validateId(id);
@@ -79,6 +92,9 @@ public class BookingServiceImpl implements BookingService {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Booking> findAllBookingsOfBooker(Long userId, State state) {
         UserValidatorService.validateId(userId);
@@ -107,6 +123,9 @@ public class BookingServiceImpl implements BookingService {
         return bookingList;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Booking> findAllBookingsOfOwner(Long userId, State state) {
         UserValidatorService.validateId(userId);
@@ -132,6 +151,9 @@ public class BookingServiceImpl implements BookingService {
         return bookingList;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Booking findLastBooking(Item item) {
         return bookingRepository
@@ -142,6 +164,9 @@ public class BookingServiceImpl implements BookingService {
                 .orElse(null);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Booking findFutureBooking(Item item) {
         return bookingRepository

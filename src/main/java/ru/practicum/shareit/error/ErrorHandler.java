@@ -26,7 +26,7 @@ public class ErrorHandler {
 
     /**
      * Обрабатывает исключения валидации, такие как {@link MethodArgumentNotValidException}
-     * и {@link ValidationException}.
+     * , {@link ValidationException} и {@link NotAvailableException}.
      *
      * @param e исключение, связанное с ошибкой валидации
      * @return карта с сообщением об ошибке и описанием
@@ -40,16 +40,6 @@ public class ErrorHandler {
                 "description", e.getMessage()
         );
     }
-
-//    @ExceptionHandler(NotAvailableException.class)
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    public Map<String, String> handleNotAvailableException(final NotAvailableException e) {
-//        log.error("Ошибка доступности вещи для бронирования: {}.", e.getMessage());
-//        return Map.of(
-//                "error", "Ошибка доступности вещи для бронирования",
-//                "description", e.getMessage()
-//        );
-//    }
 
     /**
      * Обрабатывает исключение {@link NotFoundException}, которое возникает, когда

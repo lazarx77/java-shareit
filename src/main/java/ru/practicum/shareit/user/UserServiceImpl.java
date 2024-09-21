@@ -8,7 +8,6 @@ import ru.practicum.shareit.user.model.User;
 
 import java.util.List;
 
-
 /**
  * Класс UserServiceImpl реализует интерфейс UserService и предоставляет
  * функциональность для работы с пользователями, включая операции

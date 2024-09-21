@@ -48,6 +48,7 @@ CREATE TABLE IF NOT EXISTS comments (
     text TEXT NOT NULL,
     item_id INT NOT NULL,
     author_id INT NOT NULL,
+    created_at TIMESTAMP WITHOUT TIME ZONE,
     FOREIGN KEY (item_id) REFERENCES items(id) ON DELETE CASCADE,
     FOREIGN KEY (author_id) REFERENCES users(id) ON DELETE CASCADE
 );

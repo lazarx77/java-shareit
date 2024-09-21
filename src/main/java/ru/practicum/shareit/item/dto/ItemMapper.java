@@ -23,19 +23,20 @@ public class ItemMapper {
      * @param item объект типа {@link Item}, который необходимо преобразовать.
      * @return объект типа {@link ItemDto}, содержащий данные из переданного объекта {@link Item}.
      */
-    public static ItemDto mapToDtoWithComments(Item item, ItemService itemService, BookingService bookingService) {
+    public static ItemDto mapToDtoWithComments(Item item, ItemService itemService) {
         ItemDto dto = new ItemDto();
         dto.setId(item.getId());
         dto.setName(item.getName());
         dto.setDescription(item.getDescription());
-        Booking lastBooking = bookingService.findLastBooking(item);
-        Booking futureBooking = bookingService.findFutureBooking(item);
-        if (lastBooking != null) {
-            dto.setLastBooking(BookingMapper.mapToItemBookingDto(lastBooking));
-        }
-        if (futureBooking != null) {
-            dto.setNextBooking(BookingMapper.mapToItemBookingDto(futureBooking));
-        }
+
+//        Booking lastBooking = bookingService.findLastBooking(item);
+//        Booking futureBooking = bookingService.findFutureBooking(item);
+//        if (lastBooking != null) {
+//            dto.setLastBooking(BookingMapper.mapToItemBookingDto(lastBooking));
+//        }
+//        if (futureBooking != null) {
+//            dto.setNextBooking(BookingMapper.mapToItemBookingDto(futureBooking));
+//        }
         if (item.getAvailable() != null) {
             dto.setAvailable(item.getAvailable());
         }

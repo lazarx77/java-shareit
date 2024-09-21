@@ -3,7 +3,11 @@ package ru.practicum.shareit.item.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import org.springframework.cglib.core.Local;
 import ru.practicum.shareit.user.model.User;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -24,4 +28,7 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = false)
     private User author;
+
+    @Column(name = "created_at")
+    LocalDateTime created;
 }

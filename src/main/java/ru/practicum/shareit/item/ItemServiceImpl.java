@@ -116,20 +116,12 @@ public class ItemServiceImpl implements ItemService {
         ItemValidatorService.validateId(itemId);
         Booking booking = bookingRepository.findByItemIdAndBookerIdAndEndBefore(itemId, authorId, LocalDateTime.now())
                 .orElseThrow(()-> new ValidationException("Бронь с указанными параметрами не существует>"));
-//        Booking booking = bookingRepository.findByItemId(itemId)
-//                .orElseThrow(() -> new NotFoundException("Такая бронь не найдена"));
-//        if (!booking.getBooker().getId().equals(authorId)) {
-//            throw new ItemDoNotBelongToUser("Такой брони не существует для данного пользователя");
-//        }
-//        if (booking.getStatus() == Status.APPROVED) {
-//            throw new ValidationException("Вещь в данный момент забронирована");
-//        }
-
         User booker = booking.getBooker();
         Comment comment = new Comment();
         comment.setItem(booking.getItem());
         comment.setAuthor(booker);
         comment.setText(dto.getText());
+        comment.setCreated(LocalDateTime.now());
         return commentRepository.save(comment);
     }
 

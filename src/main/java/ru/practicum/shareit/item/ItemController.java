@@ -60,7 +60,9 @@ public class ItemController {
      */
     @GetMapping("/{itemId}")
     public ItemDto getItemDtoById(@PathVariable("itemId") Long id) {
-        return ItemMapper.mapToDtoWithComments(itemService.getItem(id), itemService, bookingService);
+        return ItemMapper.mapToDtoWithComments(itemService.getItem(id), itemService
+//                , bookingService
+        );
     }
 
     /**

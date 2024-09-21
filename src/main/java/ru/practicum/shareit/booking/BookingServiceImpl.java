@@ -29,11 +29,11 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public Booking addBooking(BookingAddDto dto, Long userId) {
+        BookingValidatorService.timeCheck(dto, LocalDateTime.now());
         log.info("Запуск записи бронирования");
         UserValidatorService.validateId(userId);
         log.info("Проверка наличия пользователя в БД");
         userService.findUserById(userId);
-        BookingValidatorService.timeCheck(dto);
         Item item = itemService.getItem(dto.getItemId());
         if (!item.isAvailable()) {
             throw new NotAvailableException("Вещь с id= " + item.getId() + " недоступна для бронирования");
@@ -148,18 +148,4 @@ public class BookingServiceImpl implements BookingService {
                         .getItem(item.getId()).getOwner()
                         .getId(), LocalDateTime.now()).orElse(null);
     }
-
-
-//    private void setCancelledStatus(Booking booking) {
-//        if(booking.getEnd().isBefore(LocalDateTime.now())) {
-//            booking.setStatus(Status.CANCELED);
-//            bookingRepository.save(booking);
-//        }
-//    }
-
-//    public Booking getPastBooking(Long itemId, Long bookerId) {
-//        return bookingRepository
-//                .findByItemIdAndBookerIdAndEndBefore(itemId, bookerId, LocalDateTime.now())
-//                .orElseThrow(() -> new NotFoundException("Такая бронь не найдена"));
-//    }
 }

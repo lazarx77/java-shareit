@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Data
 public class BookingAddDto {
+
     Long id;
 
     @NotNull(message = "Время начала бронирования не может быть null")

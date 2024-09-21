@@ -12,10 +12,10 @@ import java.time.LocalDateTime;
 /**
  * TODO Sprint add-bookings.
  */
-//@AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class BookingDto {
+
     Long id;
 
     @NotNull(message = "Время начала бронирования не может быть null")
@@ -24,7 +24,6 @@ public class BookingDto {
     @NotNull(message = "Время окончания бронирования не может быть null")
     private LocalDateTime end;
 
-//    @NotNull(message = "Бронируемую вещь необходимо указать")
     private Item item;
 
     private User booker;

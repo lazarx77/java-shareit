@@ -1,5 +1,6 @@
 package ru.practicum.shareit.user;
 
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
@@ -12,6 +13,7 @@ import java.util.List;
  * Он предоставляет методы для выполнения операций CRUD (создание, чтение, обновление, удаление)
  * над объектами типа User и их представлениями типа UserDto.
  */
+@Transactional(readOnly = true)
 public interface UserService {
 
     /**
@@ -28,6 +30,7 @@ public interface UserService {
      * @return Созданный объект пользователя.
      * @throws IllegalArgumentException если данные пользователя некорректны.
      */
+    @Transactional
     User addUser(User user);
 
     /**
@@ -38,6 +41,7 @@ public interface UserService {
      * @return Обновленный объект пользователя.
      * @throws NotFoundException если пользователь с указанным идентификатором не найден.
      */
+    @Transactional
     User updateUser(Long id, User updatedUser);
 
     /**
@@ -55,5 +59,6 @@ public interface UserService {
      * @param id Уникальный идентификатор пользователя, которого необходимо удалить.
      * @throws NotFoundException если пользователь с указанным идентификатором не найден.
      */
+    @Transactional
     void deleteUser(Long id);
 }

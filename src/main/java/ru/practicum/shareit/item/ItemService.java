@@ -1,5 +1,6 @@
 package ru.practicum.shareit.item;
 
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemOwnerDto;
@@ -14,6 +15,7 @@ import java.util.List;
  * Реализации этого интерфейса могут использовать различные способы обработки данных,
  * такие как взаимодействие с репозиториями и бизнес-логика.
  */
+@Transactional(readOnly = true)
 public interface ItemService {
 
     /**
@@ -23,6 +25,7 @@ public interface ItemService {
      * @param dto    объект типа {@link ItemDto}, содержащий данные о предмете.
      * @return добавленный объект типа {@link Item}.
      */
+    @Transactional
     Item addNewItem(Long userId, ItemDto dto);
 
     /**
@@ -33,6 +36,7 @@ public interface ItemService {
      * @param dto    объект типа {@link ItemDto}, содержащий новые данные о предмете.
      * @return обновленный объект типа {@link Item}.
      */
+    @Transactional
     Item updateItem(Long userId, Long itemId, ItemDto dto);
 
     /**
@@ -59,6 +63,7 @@ public interface ItemService {
      */
     List<Item> searchItems(String text);
 
+    @Transactional
     Comment addComment(Long bookerId, Long itemId, CommentDto dto);
 
     List<Comment> getComments(Long itemId);

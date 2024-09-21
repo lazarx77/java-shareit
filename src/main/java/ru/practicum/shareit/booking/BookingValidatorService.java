@@ -18,9 +18,7 @@ public class BookingValidatorService {
 
     public static void timeCheck(BookingAddDto dto, LocalDateTime now) {
         log.info("Проверка на пересечение времени");
-        if (!(dto.getStart().isBefore(dto.getEnd())
-                && (dto.getStart()).isAfter(now))
-        ) {
+        if (!(dto.getStart().isBefore(dto.getEnd()) && (dto.getStart()).isAfter(now))        ) {
             throw new ValidationException("Время начала бронирования должно быть раньше времени окончания, " +
                     "и оба времени не могут быть в прошлом.");
         }

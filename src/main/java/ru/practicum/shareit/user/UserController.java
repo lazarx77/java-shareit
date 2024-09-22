@@ -29,7 +29,10 @@ public class UserController {
      */
     @GetMapping
     public List<UserDto> getAllUsers() {
-        return userService.findAllUsers().stream().map(UserMapper::mapToDto).toList();
+        return userService.findAllUsers()
+                .stream()
+                .map(UserMapper::mapToDto)
+                .toList();
     }
 
     /**

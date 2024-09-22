@@ -1,8 +1,8 @@
 package ru.practicum.shareit.item.dto;
 
-import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.BookingService;
 import ru.practicum.shareit.booking.dto.BookingMapper;
+import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.item.ItemService;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
@@ -20,7 +20,7 @@ public class ItemMapper {
     /**
      * Преобразует объект Item в ItemDto с комментариями.
      *
-     * @param item объект предмета, который нужно преобразовать
+     * @param item        объект предмета, который нужно преобразовать
      * @param itemService сервис для получения комментариев к предмету
      * @return объект ItemDto, содержащий данные из объекта Item и список комментариев
      */
@@ -33,7 +33,10 @@ public class ItemMapper {
             dto.setAvailable(item.getAvailable());
         }
         List<Comment> comments = itemService.getComments(item.getId());
-        dto.setComments(comments.stream().map(CommentMapper::mapToCommentDto).toList());
+        dto.setComments(comments
+                .stream()
+                .map(CommentMapper::mapToCommentDto)
+                .toList());
         return dto;
     }
 
@@ -75,9 +78,9 @@ public class ItemMapper {
     /**
      * Преобразует объект Item в ItemOwnerDto с информацией о бронированиях и комментариях.
      *
-     * @param item объект предмета, который нужно преобразовать
+     * @param item           объект предмета, который нужно преобразовать
      * @param bookingService сервис для получения информации о бронированиях
-     * @param itemService сервис для получения комментариев к предмету
+     * @param itemService    сервис для получения комментариев к предмету
      * @return объект ItemOwnerDto, содержащий данные о предмете, его бронированиях и комментариях
      */
     public static ItemOwnerDto mapToDtoOwner(Item item, BookingService bookingService, ItemService itemService) {
@@ -93,7 +96,10 @@ public class ItemMapper {
             dto.setNextBooking(BookingMapper.mapToItemBookingDto(futureBooking));
         }
         List<Comment> comments = itemService.getComments(item.getId());
-        dto.setComments(comments.stream().map(CommentMapper::mapToCommentDto).toList());
+        dto.setComments(comments
+                .stream()
+                .map(CommentMapper::mapToCommentDto)
+                .toList());
         return dto;
     }
 }

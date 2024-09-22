@@ -15,7 +15,7 @@ public class CommentMapper {
      *
      * @param comment объект комментария, который нужно преобразовать
      * @return объект CommentDto, содержащий данные из объекта Comment
-     *         (идентификатор, имя автора, текст комментария и дату создания)
+     * (идентификатор, имя автора, текст комментария и дату создания)
      */
     public static CommentDto mapToCommentDto(Comment comment) {
         CommentDto dto = new CommentDto();

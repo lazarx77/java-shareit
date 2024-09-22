@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User addUser(User user) {
-        UserValidatorService.checkEmailIsUnique(userRepository.findUserByEmail(user.getEmail()));
+        UserValidator.checkEmailIsUnique(userRepository.findUserByEmail(user.getEmail()));
         log.info("Создание пользователя: {} ", user.getName());
         return userRepository.save(user);
     }
@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User updateUser(Long id, User updatedUser) {
-        UserValidatorService.validateId(id);
+        UserValidator.validateId(id);
         log.info("Обновление пользователя с id: {} ", id);
         User user = userRepository
                 .findById(id)
@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
                         + updatedUser.getId() + " не существует"));
         updatedUser.setId(id);
         if (updatedUser.getEmail() != null) {
-            UserValidatorService.checkEmailIsUnique(userRepository.findUserByEmail(updatedUser.getEmail()));
+            UserValidator.checkEmailIsUnique(userRepository.findUserByEmail(updatedUser.getEmail()));
         } else {
             updatedUser.setEmail(user.getEmail());
         }

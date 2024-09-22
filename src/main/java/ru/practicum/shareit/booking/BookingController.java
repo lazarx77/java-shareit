@@ -22,13 +22,13 @@ import java.util.List;
 @AllArgsConstructor
 public class BookingController {
 
-    BookingService bookingService;
+    private final BookingService bookingService;
 
     /**
      * Создает новое бронирование.
      *
      * @param userId идентификатор пользователя, осуществляющего бронирование
-     * @param dto объект, содержащий данные для создания нового бронирования
+     * @param dto    объект, содержащий данные для создания нового бронирования
      * @return созданное бронирование
      */
     @PostMapping
@@ -39,9 +39,9 @@ public class BookingController {
     /**
      * Изменяет статус существующего бронирования.
      *
-     * @param id идентификатор бронирования, статус которого нужно изменить
+     * @param id       идентификатор бронирования, статус которого нужно изменить
      * @param approved новый статус бронирования (одобрено/отклонено)
-     * @param userId идентификатор пользователя, изменяющего статус
+     * @param userId   идентификатор пользователя, изменяющего статус
      * @return объект BookingDto с обновленным статусом
      */
     @PatchMapping("/{bookingId}")
@@ -55,7 +55,7 @@ public class BookingController {
      * Получает информацию о конкретном бронировании.
      *
      * @param userId идентификатор пользователя, запрашивающего информацию
-     * @param id идентификатор бронирования, информацию о котором нужно получить
+     * @param id     идентификатор бронирования, информацию о котором нужно получить
      * @return объект BookingDto с данными о бронировании
      */
     @GetMapping("/{bookingId}")
@@ -68,27 +68,32 @@ public class BookingController {
      * Получает список всех бронирований пользователя.
      *
      * @param userId идентификатор пользователя, для которого нужно получить список бронирований
-     * @param state состояние бронирований, которые нужно получить (ALL, CURRENT, PAST, FUTURE, WAITING, REJECTED)
+     * @param state  состояние бронирований, которые нужно получить (ALL, CURRENT, PAST, FUTURE, WAITING, REJECTED)
      * @return список объектов BookingDto с данными о бронированиях
      */
     @GetMapping
     public List<BookingDto> findAllBookingsOfBooker(@RequestHeader("X-Sharer-User-Id") Long userId,
                                                     @RequestParam(defaultValue = "ALL") State state) {
         return bookingService
-                .findAllBookingsOfBooker(userId, state).stream().map(BookingMapper::mapToBookingDto).toList();
+                .findAllBookingsOfBooker(userId, state)
+                .stream()
+                .map(BookingMapper::mapToBookingDto)
+                .toList();
     }
 
     /**
      * Получает список всех бронирований, связанных с предметами, принадлежащими пользователю.
      *
      * @param userId идентификатор владельца предметов
-     * @param state состояние бронирований, которые нужно получить (ALL, CURRENT, PAST, FUTURE, WAITING, REJECTED)
+     * @param state  состояние бронирований, которые нужно получить (ALL, CURRENT, PAST, FUTURE, WAITING, REJECTED)
      * @return список объектов BookingDto с данными о бронированиях
      */
     @GetMapping("/owner")
     public List<BookingDto> findAllBookingsOfOwner(@RequestHeader("X-Sharer-User-Id") Long userId,
                                                    @RequestParam(defaultValue = "ALL") State state) {
         return bookingService
-                .findAllBookingsOfOwner(userId, state).stream().map(BookingMapper::mapToBookingDto).toList();
+                .findAllBookingsOfOwner(userId, state)
+                .stream().map(BookingMapper::mapToBookingDto)
+                .toList();
     }
 }

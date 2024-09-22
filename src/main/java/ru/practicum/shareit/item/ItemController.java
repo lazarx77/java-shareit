@@ -69,8 +69,10 @@ public class ItemController {
      */
     @GetMapping
     public List<ItemOwnerDto> getAllItemsOfOwner(@RequestHeader("X-Sharer-User-Id") Long userId) {
-        return itemService.getAllItemsOfOwner(userId).stream()
-                .map(item -> ItemMapper.mapToDtoOwner(item, bookingService, itemService)).toList();
+        return itemService.getAllItemsOfOwner(userId)
+                .stream()
+                .map(item -> ItemMapper.mapToDtoOwner(item, bookingService, itemService))
+                .toList();
     }
 
     /**
@@ -81,7 +83,9 @@ public class ItemController {
      */
     @GetMapping("/search")
     public List<ItemDto> searchItems(@RequestParam("text") String text) {
-        return itemService.searchItems(text).stream().map(ItemMapper::mapToDto).toList();
+        return itemService.searchItems(text)
+                .stream().map(ItemMapper::mapToDto)
+                .toList();
     }
 
     /**

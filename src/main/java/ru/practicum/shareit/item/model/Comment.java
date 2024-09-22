@@ -20,11 +20,11 @@ public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
     @Column
     @NotBlank
-    String text;
+    private String text;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id", nullable = false)
@@ -35,5 +35,5 @@ public class Comment {
     private User author;
 
     @Column(name = "created_at")
-    LocalDateTime created;
+    private LocalDateTime created;
 }

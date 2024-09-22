@@ -14,7 +14,7 @@ import ru.practicum.shareit.item.dto.ItemMapper;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.UserService;
-import ru.practicum.shareit.user.UserValidatorService;
+import ru.practicum.shareit.user.UserValidator;
 import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
@@ -40,7 +40,7 @@ public class ItemServiceImpl implements ItemService {
      */
     @Override
     public Item addNewItem(Long userId, ItemDto dto) {
-        UserValidatorService.validateId(userId);
+        UserValidator.validateId(userId);
         log.info("Проверка на наличие пользователя с id: {} ", userId);
         User user = userService.findUserById(userId);
         log.info("Сохраняем предмет с id пользователя: {} ", userId);
@@ -55,8 +55,8 @@ public class ItemServiceImpl implements ItemService {
      */
     @Override
     public Item updateItem(Long userId, Long itemId, ItemDto dto) {
-        UserValidatorService.validateId(userId);
-        ItemValidatorService.validateId(itemId);
+        UserValidator.validateId(userId);
+        ItemValidator.validateId(itemId);
         log.info("Проверка на наличие пользователя с id: {} ", userId);
         userService.findUserById(userId);
         log.info("Обновление предмета с id: {} ", itemId);
@@ -84,7 +84,7 @@ public class ItemServiceImpl implements ItemService {
      */
     @Override
     public Item getItem(Long itemId) {
-        ItemValidatorService.validateId(itemId);
+        ItemValidator.validateId(itemId);
         return itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("Предмет с id = " + itemId + " не найден"));
     }
@@ -94,7 +94,7 @@ public class ItemServiceImpl implements ItemService {
      */
     @Override
     public List<Item> getAllItemsOfOwner(Long userId) {
-        UserValidatorService.validateId(userId);
+        UserValidator.validateId(userId);
         return itemRepository.findByOwnerId(userId);
     }
 
@@ -106,7 +106,10 @@ public class ItemServiceImpl implements ItemService {
         if (text == null || text.isBlank()) {
             return Collections.emptyList();
         }
-        return itemRepository.search(text).stream().filter(Item::isAvailable).toList();
+        return itemRepository.search(text)
+                .stream()
+                .filter(Item::isAvailable)
+                .toList();
     }
 
     /**
@@ -115,8 +118,8 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Comment addComment(Long authorId, Long itemId, CommentDto dto) {
         log.info("Добавление комментария для предмета с id= " + itemId);
-        UserValidatorService.validateId(authorId);
-        ItemValidatorService.validateId(itemId);
+        UserValidator.validateId(authorId);
+        ItemValidator.validateId(itemId);
         Booking booking = bookingRepository.findByItemIdAndBookerIdAndEndBefore(itemId, authorId, LocalDateTime.now())
                 .orElseThrow(() -> new ValidationException("Бронь с указанными параметрами не существует>"));
         User booker = booking.getBooker();

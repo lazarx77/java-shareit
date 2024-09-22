@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import ru.practicum.shareit.booking.model.Booking;
 
 import java.time.LocalDateTime;
-import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -22,7 +22,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
      * @param bookerId идентификатор пользователя, чьи бронирования нужно найти
      * @return список бронирований, сделанных пользователем
      */
-    LinkedList<Booking> findAllBookingsByBooker_idOrderByStartDesc(Long bookerId);
+    List<Booking> findAllBookingsByBooker_idOrderByStartDesc(Long bookerId);
 
     /**
      * Находит все бронирования, сделанные пользователем, которые начинаются до текущего времени
@@ -30,23 +30,23 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
      *
      * @param bookerId идентификатор пользователя
      * @param nowStart текущее время начала
-     * @param nowEnd текущее время окончания
+     * @param nowEnd   текущее время окончания
      * @return список бронирований, соответствующих критериям
      */
-    LinkedList<Booking> findAllByBooker_idAndStartBeforeAndEndAfterOrderByStartDesc(Long bookerId,
-                                                                                    LocalDateTime nowStart,
-                                                                                    LocalDateTime nowEnd);
+    List<Booking> findAllByBooker_idAndStartBeforeAndEndAfterOrderByStartDesc(Long bookerId,
+                                                                              LocalDateTime nowStart,
+                                                                              LocalDateTime nowEnd);
 
     /**
      * Находит все бронирования, сделанные пользователем, которые заканчиваются после текущего времени,
      * отсортированные по времени начала в порядке убывания.
      *
      * @param bookerId идентификатор пользователя
-     * @param nowEnd текущее время окончания
+     * @param nowEnd   текущее время окончания
      * @return список бронирований, соответствующих критериям
      */
-    LinkedList<Booking> findAllByBooker_idAndEndAfterOrderByStartDesc(Long bookerId,
-                                                                      LocalDateTime nowEnd);
+    List<Booking> findAllByBooker_idAndEndAfterOrderByStartDesc(Long bookerId,
+                                                                LocalDateTime nowEnd);
 
     /**
      * Находит все бронирования, сделанные пользователем, которые начинаются после текущего времени,
@@ -56,18 +56,18 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
      * @param nowStart текущее время начала
      * @return список бронирований, соответствующих критериям
      */
-    LinkedList<Booking> findAllByBooker_idAndStartAfterOrderByStartDesc(Long bookerId,
-                                                                        LocalDateTime nowStart);
+    List<Booking> findAllByBooker_idAndStartAfterOrderByStartDesc(Long bookerId,
+                                                                  LocalDateTime nowStart);
 
     /**
      * Находит все бронирования, сделанные пользователем с определенным статусом,
      * отсортированные по времени начала в порядке убывания.
      *
      * @param bookerId идентификатор пользователя
-     * @param status статус бронирования
+     * @param status   статус бронирования
      * @return список бронирований, соответствующих критериям
      */
-    LinkedList<Booking> findAllByBooker_idAndStatusOrderByStartDesc(Long bookerId, Status status);
+    List<Booking> findAllByBooker_idAndStatusOrderByStartDesc(Long bookerId, Status status);
 
     /**
      * Находит все бронирования, связанные с предметами, принадлежащими пользователю,
@@ -76,19 +76,19 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
      * @param ownerId идентификатор владельца предметов
      * @return список бронирований, соответствующих критериям
      */
-    LinkedList<Booking> findAllByItem_Owner_idOrderByStartDesc(Long ownerId);
+    List<Booking> findAllByItem_Owner_idOrderByStartDesc(Long ownerId);
 
     /**
      * Находит все бронирования, связанные с предметами, принадлежащими пользователю,
      * которые начинаются до текущего времени и заканчиваются после текущего времени,
      * отсортированные по времени начала в порядке убывания.
      *
-     * @param ownerId идентификатор владельца предметов
+     * @param ownerId  идентификатор владельца предметов
      * @param nowStart текущее время начала
-     * @param nowEnd текущее время окончания
+     * @param nowEnd   текущее время окончания
      * @return список бронирований, соответствующих критериям
      */
-    LinkedList<Booking> findAllByItem_Owner_idAndStartBeforeAndEndAfterOrderByStartDesc(
+    List<Booking> findAllByItem_Owner_idAndStartBeforeAndEndAfterOrderByStartDesc(
             Long ownerId, LocalDateTime nowStart, LocalDateTime nowEnd);
 
     /**
@@ -96,11 +96,11 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
      * которые заканчиваются после текущего времени, отсортированные по времени начала в порядке убывания.
      *
      * @param bookerId идентификатор пользователя
-     * @param nowEnd текущее время окончания
+     * @param nowEnd   текущее время окончания
      * @return список бронирований, соответствующих критериям
      */
-    LinkedList<Booking> findAllByItem_Owner_idAndEndAfterOrderByStartDesc(Long bookerId,
-                                                                          LocalDateTime nowEnd);
+    List<Booking> findAllByItem_Owner_idAndEndAfterOrderByStartDesc(Long bookerId,
+                                                                    LocalDateTime nowEnd);
 
     /**
      * Находит все бронирования, связанные с предметами, принадлежащими пользователю,
@@ -110,18 +110,18 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
      * @param nowStart текущее время начала
      * @return список бронирований, соответствующих критериям
      */
-    LinkedList<Booking> findAllByItem_Owner_idAndStartAfterOrderByStartDesc(Long bookerId,
-                                                                            LocalDateTime nowStart);
+    List<Booking> findAllByItem_Owner_idAndStartAfterOrderByStartDesc(Long bookerId,
+                                                                      LocalDateTime nowStart);
 
     /**
      * Находит все бронирования, связанные с предметами, принадлежащими пользователю,
      * с определенным статусом, отсортированные по времени начала в порядке убывания.
      *
      * @param bookerId идентификатор пользователя
-     * @param status статус бронирования
+     * @param status   статус бронирования
      * @return список бронирований, соответствующих критериям
      */
-    LinkedList<Booking> findAllByItem_Owner_idAndStatusOrderByStartDesc(Long bookerId, Status status);
+    List<Booking> findAllByItem_Owner_idAndStatusOrderByStartDesc(Long bookerId, Status status);
 
     /**
      * Находит первое бронирование, связанное с предметами, принадлежащими пользователю,
@@ -149,9 +149,9 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
      * Находит бронирование по идентификатору предмета и идентификатору бронирующего,
      * которое заканчивается до текущего времени.
      *
-     * @param itemId идентификатор предмета
+     * @param itemId   идентификатор предмета
      * @param bookerId идентификатор бронирующего
-     * @param now текущее время
+     * @param now      текущее время
      * @return опциональное бронирование, соответствующее критериям
      */
     Optional<Booking> findByItemIdAndBookerIdAndEndBefore(Long itemId, Long bookerId, LocalDateTime now);

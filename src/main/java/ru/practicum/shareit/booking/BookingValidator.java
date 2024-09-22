@@ -7,13 +7,13 @@ import ru.practicum.shareit.exception.ValidationException;
 import java.time.LocalDateTime;
 
 /**
- * Сервис для валидации данных бронирования.
+ * Валидация данных бронирования.
  * <p>
  * Этот класс содержит статические методы для проверки корректности данных,
  * связанных с бронированиями, таких как идентификаторы и временные рамки.
  */
 @Slf4j
-public class BookingValidatorService {
+public class BookingValidator {
 
     /**
      * Проверяет наличие идентификатора бронирования.

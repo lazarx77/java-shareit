@@ -1,17 +1,17 @@
 package ru.practicum.shareit.user;
 
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.List;
-
 
 /**
  * Интерфейс UserService определяет контракт для работы с пользователями.
  * Он предоставляет методы для выполнения операций CRUD (создание, чтение, обновление, удаление)
  * над объектами типа User и их представлениями типа UserDto.
  */
+@Transactional(readOnly = true)
 public interface UserService {
 
     /**
@@ -19,7 +19,7 @@ public interface UserService {
      *
      * @return Список объектов UserDto, представляющих всех пользователей.
      */
-    List<UserDto> getAll();
+    List<User> findAllUsers();
 
     /**
      * Создает нового пользователя.
@@ -28,7 +28,8 @@ public interface UserService {
      * @return Созданный объект пользователя.
      * @throws IllegalArgumentException если данные пользователя некорректны.
      */
-    User createUser(User user);
+    @Transactional
+    User addUser(User user);
 
     /**
      * Обновляет информацию о существующем пользователе.
@@ -38,7 +39,8 @@ public interface UserService {
      * @return Обновленный объект пользователя.
      * @throws NotFoundException если пользователь с указанным идентификатором не найден.
      */
-    User update(Long id, User updatedUser);
+    @Transactional
+    User updateUser(Long id, User updatedUser);
 
     /**
      * Находит пользователя по его уникальному идентификатору.
@@ -47,7 +49,7 @@ public interface UserService {
      * @return Объект UserDto, представляющий найденного пользователя.
      * @throws NotFoundException если пользователь с указанным идентификатором не найден.
      */
-    UserDto findById(Long id);
+    User findUserById(Long id);
 
     /**
      * Удаляет пользователя по его уникальному идентификатору.
@@ -55,5 +57,6 @@ public interface UserService {
      * @param id Уникальный идентификатор пользователя, которого необходимо удалить.
      * @throws NotFoundException если пользователь с указанным идентификатором не найден.
      */
-    void delete(Long id);
+    @Transactional
+    void deleteUser(Long id);
 }

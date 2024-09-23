@@ -4,21 +4,20 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.booking.Status;
-import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
 
 /**
- * DTO (Data Transfer Object) для представления информации о бронировании.
+ * DTO (Data Transfer Object) для добавления нового бронирования.
  * <p>
  * Этот класс используется для передачи данных о бронировании между слоями приложения.
- * Он содержит информацию о времени начала и окончания бронирования, а также о
- * бронируемом предмете и пользователе, который делает бронирование.
+ * Он содержит информацию о времени начала и окончания бронирования, идентификаторе
+ * бронируемого предмета, а также информацию о пользователе, который делает бронирование.
  */
 @NoArgsConstructor
 @Data
-public class BookingDto {
+public class BookingAddDto {
 
     private Long id;
 
@@ -28,7 +27,8 @@ public class BookingDto {
     @NotNull(message = "Время окончания бронирования не может быть null")
     private LocalDateTime end;
 
-    private Item item;
+    @NotNull(message = "Бронируемую вещь необходимо указать")
+    private Long itemId;
 
     private User booker;
 

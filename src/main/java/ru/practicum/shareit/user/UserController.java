@@ -5,6 +5,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.dto.UserMapper;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.List;
@@ -28,7 +29,10 @@ public class UserController {
      */
     @GetMapping
     public List<UserDto> getAllUsers() {
-        return userService.getAll();
+        return userService.findAllUsers()
+                .stream()
+                .map(UserMapper::mapToDto)
+                .toList();
     }
 
     /**
@@ -40,7 +44,7 @@ public class UserController {
      */
     @PostMapping
     public User saveNewUser(@Validated @RequestBody User user) {
-        return userService.createUser(user);
+        return userService.addUser(user);
     }
 
     /**
@@ -52,7 +56,7 @@ public class UserController {
      */
     @GetMapping("/{id}")
     public UserDto findById(@PathVariable("id") long id) {
-        return userService.findById(id);
+        return UserMapper.mapToDto(userService.findUserById(id));
     }
 
     /**
@@ -65,7 +69,7 @@ public class UserController {
      */
     @PatchMapping("/{id}")
     public User update(@PathVariable("id") long id, @RequestBody User user) {
-        return userService.update(id, user);
+        return userService.updateUser(id, user);
     }
 
     /**
@@ -76,6 +80,6 @@ public class UserController {
      */
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") long id) {
-        userService.delete(id);
+        userService.deleteUser(id);
     }
 }

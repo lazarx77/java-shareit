@@ -1,59 +1,81 @@
 package ru.practicum.shareit.item;
 
+import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemOwnerDto;
+import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.List;
 
 /**
- * Интерфейс ItemService определяет контракт для работы с предметами в системе.
- * Он предоставляет методы для добавления, обновления, получения и поиска предметов.
- * Реализации этого интерфейса могут использовать различные способы обработки данных,
- * такие как взаимодействие с репозиториями и бизнес-логика.
+ * Сервис для управления предметами в системе.
+ * Предоставляет методы для выполнения операций с предметами и комментариями.
  */
+@Transactional(readOnly = true)
 public interface ItemService {
 
     /**
-     * Добавляет новый предмет в систему.
+     * Добавляет новый предмет.
      *
-     * @param userId идентификатор пользователя, добавляющего предмет.
-     * @param dto    объект типа {@link ItemDto}, содержащий данные о предмете.
-     * @return добавленный объект типа {@link Item}.
+     * @param userId уникальный идентификатор пользователя, добавляющего предмет.
+     * @param dto    объект, содержащий данные о предмете.
+     * @return добавленный предмет.
      */
+    @Transactional
     Item addNewItem(Long userId, ItemDto dto);
 
     /**
-     * Обновляет существующий предмет в системе.
+     * Обновляет информацию о существующем предмете.
      *
-     * @param userId идентификатор пользователя, пытающегося обновить предмет.
-     * @param itemId идентификатор предмета, который необходимо обновить.
-     * @param dto    объект типа {@link ItemDto}, содержащий новые данные о предмете.
-     * @return обновленный объект типа {@link Item}.
+     * @param userId уникальный идентификатор пользователя, обновляющего предмет.
+     * @param itemId уникальный идентификатор предмета, который необходимо обновить.
+     * @param dto    объект, содержащий обновленные данные о предмете.
+     * @return обновленный предмет.
      */
+    @Transactional
     Item updateItem(Long userId, Long itemId, ItemDto dto);
 
     /**
-     * Получает объект типа {@link ItemDto} по его идентификатору.
+     * Получает информацию о предмете по его идентификатору.
      *
-     * @param id идентификатор предмета, который необходимо получить.
-     * @return объект типа {@link ItemDto}, содержащий данные о предмете.
+     * @param id уникальный идентификатор предмета.
+     * @return предмет с указанным идентификатором.
      */
-    ItemDto getItemDtoById(Long id);
+    Item getItem(Long id);
 
     /**
-     * Получает все предметы, принадлежащие указанному владельцу.
+     * Получает все предметы, принадлежащие указанному пользователю.
      *
-     * @param userId идентификатор владельца, чьи предметы необходимо получить.
-     * @return список объектов типа {@link ItemOwnerDto}, содержащих данные о предметах владельца.
+     * @param userId уникальный идентификатор пользователя.
+     * @return список предметов, принадлежащих указанному пользователю.
      */
-    List<ItemOwnerDto> getAllItemsOfOwner(Long userId);
+    List<Item> getAllItemsOfOwner(Long userId);
 
     /**
-     * Ищет предметы по текстовому запросу.
+     * Ищет предметы по заданному текстовому запросу.
      *
      * @param text текст для поиска предметов.
-     * @return список объектов типа {@link ItemDto}, соответствующих критериям поиска.
+     * @return список предметов, соответствующих заданному текстовому запросу.
      */
-    List<ItemDto> searchItems(String text);
+    List<Item> searchItems(String text);
+
+    /**
+     * Добавляет комментарий к предмету.
+     *
+     * @param bookerId уникальный идентификатор пользователя, оставляющего комментарий.
+     * @param itemId   уникальный идентификатор предмета, к которому добавляется комментарий.
+     * @param dto      объект, содержащий данные комментария.
+     * @return добавленный комментарий.
+     */
+    @Transactional
+    Comment addComment(Long bookerId, Long itemId, CommentDto dto);
+
+    /**
+     * Получает все комментарии к указанному предмету.
+     *
+     * @param itemId уникальный идентификатор предмета.
+     * @return список комментариев, связанных с указанным предметом.
+     */
+    List<Comment> getComments(Long itemId);
 }

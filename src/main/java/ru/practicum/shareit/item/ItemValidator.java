@@ -4,12 +4,12 @@ import lombok.extern.slf4j.Slf4j;
 import ru.practicum.shareit.exception.ValidationException;
 
 /**
- * Класс ItemValidatorService предоставляет методы для валидации данных, связанных с предметами.
+ * ItemValidator предоставляет методы для валидации данных, связанных с предметами.
  * Он используется для проверки корректности идентификаторов и других параметров, чтобы гарантировать,
  * что данные, передаваемые в систему, соответствуют установленным требованиям.
  */
 @Slf4j
-public class ItemValidatorService {
+public class ItemValidator {
 
     /**
      * Проверяет наличие идентификатора предмета.

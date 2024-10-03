@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.BookingService;
@@ -16,6 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/items")
 @AllArgsConstructor
+@Slf4j
 public class ItemController {
 
     private final ItemService itemService;
@@ -96,7 +98,7 @@ public class ItemController {
      * @param dto      объект, содержащий данные комментария.
      * @return объект DTO, представляющий добавленный комментарий.
      */
-    @PostMapping("{itemId}/comment")
+    @PostMapping("/{itemId}/comment")
     public CommentDto addComment(@RequestHeader("X-Sharer-User-Id") Long authorId, @PathVariable("itemId") Long itemId,
                                  @RequestBody CommentDto dto) {
         return CommentMapper.mapToCommentDto(itemService.addComment(authorId, itemId, dto));

@@ -78,4 +78,6 @@ public interface ItemService {
      * @return список комментариев, связанных с указанным предметом.
      */
     List<Comment> getComments(Long itemId);
+
+    List<Item> getItemsByRequestId(Long requestId);
 }

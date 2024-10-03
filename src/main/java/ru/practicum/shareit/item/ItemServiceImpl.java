@@ -13,6 +13,8 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemMapper;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.ItemRequestRepository;
+import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.UserValidator;
 import ru.practicum.shareit.user.model.User;
@@ -34,6 +36,7 @@ public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final CommentRepository commentRepository;
     private final BookingRepository bookingRepository;
+    private final ItemRequestRepository itemRequestRepository;
 
     /**
      * {@inheritDoc}
@@ -43,8 +46,15 @@ public class ItemServiceImpl implements ItemService {
         UserValidator.validateId(userId);
         log.info("Проверка на наличие пользователя с id: {} ", userId);
         User user = userService.findUserById(userId);
-        log.info("Сохраняем предмет с id пользователя: {} ", userId);
         Item item = ItemMapper.mapToItem(dto);
+        if (dto.getRequestId() != null) {
+            log.info("Запрос вещи УКАЗАН, проверка на наличие запроса с id = " + dto.getRequestId() + " в БД");
+            ItemRequest itemRequest = itemRequestRepository
+                    .findById(dto.getRequestId())
+                    .orElseThrow(() -> new NotFoundException("Запрос с id = " + dto.getRequestId() + " не найден"));
+            item.setRequest(itemRequest);
+        }
+        log.info("Сохраняем предмет с id пользователя: {} ", userId);
         item.setOwner(user);
 
         return itemRepository.save(item);
@@ -137,5 +147,13 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<Comment> getComments(Long itemId) {
         return commentRepository.findAllByItemId(itemId);
+    }
+
+    @Override
+    public List<Item> getItemsByRequestId(Long requestId) {
+        log.info("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        log.info(requestId.toString());
+        log.info(itemRepository.findAllByRequestId(requestId).toString());
+        return itemRepository.findAllByRequestId(requestId);
     }
 }

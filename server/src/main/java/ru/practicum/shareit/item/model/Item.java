@@ -26,7 +26,6 @@ public class Item {
     private Long id;
 
     @NotBlank(message = "Название не может быть пустым")
-    @NotNull(message = "Название не может быть Null")
     @Column(nullable = false)
     private String name;
 

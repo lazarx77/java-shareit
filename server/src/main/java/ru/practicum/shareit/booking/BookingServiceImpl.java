@@ -37,9 +37,9 @@ public class BookingServiceImpl implements BookingService {
      */
     @Override
     public Booking addBooking(BookingAddDto dto, Long userId) {
-        BookingValidator.timeCheck(dto, LocalDateTime.now());
+//        BookingValidator.timeCheck(dto, LocalDateTime.now());
         log.info("Запуск записи бронирования");
-        UserValidator.validateId(userId);
+//        UserValidator.validateId(userId);
         log.info("Проверка наличия пользователя в БД id= " + userId);
         userService.findUserById(userId);
         Item item = itemService.getItem(dto.getItemId());
@@ -58,8 +58,8 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public Booking changeStatus(Long id, Boolean approved, Long userId) {
         log.info("Смена статуса бронирования id= " + id);
-        BookingValidator.validateId(id);
-        UserValidator.validateId(userId);
+//        BookingValidator.validateId(id);
+//        UserValidator.validateId(userId);
         log.info("Проверка наличия статуса approved в запросе");
         if (approved == null) {
             throw new ValidationException("Поле approved не должно быть пустым, либо должно быть true или false");
@@ -81,8 +81,8 @@ public class BookingServiceImpl implements BookingService {
      */
     @Override
     public Booking findSpecificBooking(Long id, Long userId) {
-        BookingValidator.validateId(id);
-        UserValidator.validateId(userId);
+//        BookingValidator.validateId(id);
+//        UserValidator.validateId(userId);
         Booking booking = bookingRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Такая бронь не найдена"));
         if (booking.getBooker().getId().equals(userId) || booking.getItem().getOwner().getId().equals(userId)) {
@@ -97,7 +97,7 @@ public class BookingServiceImpl implements BookingService {
      */
     @Override
     public List<Booking> findAllBookingsOfBooker(Long userId, State state) {
-        UserValidator.validateId(userId);
+//        UserValidator.validateId(userId);
         log.info("Проверка наличия пользователя в БД при получении списка всех бронирований");
         userService.findUserById(userId);
         log.info("STATE " + state);
@@ -128,7 +128,7 @@ public class BookingServiceImpl implements BookingService {
      */
     @Override
     public List<Booking> findAllBookingsOfOwner(Long userId, State state) {
-        UserValidator.validateId(userId);
+//        UserValidator.validateId(userId);
         List<Booking> bookingList;
         switch (state) {
             case ALL -> bookingList = bookingRepository.findAllByItem_Owner_idOrderByStartDesc(userId);

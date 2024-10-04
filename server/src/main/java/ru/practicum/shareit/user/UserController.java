@@ -1,7 +1,6 @@
 package ru.practicum.shareit.user;
 
 import lombok.AllArgsConstructor;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.user.dto.UserDto;
@@ -40,10 +39,9 @@ public class UserController {
      *
      * @param user Объект пользователя, который необходимо создать.
      * @return Созданный объект пользователя.
-     * @throws IllegalArgumentException если данные пользователя некорректны.
      */
     @PostMapping
-    public User saveNewUser(@Validated @RequestBody User user) {
+    public User saveNewUser(@RequestBody User user) {
         return userService.addUser(user);
     }
 

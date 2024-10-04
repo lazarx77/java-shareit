@@ -46,7 +46,6 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User updateUser(Long id, User updatedUser) {
-        UserValidator.validateId(id);
         log.info("Обновление пользователя с id: {} ", id);
         User user = userRepository
                 .findById(id)

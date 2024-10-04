@@ -34,14 +34,14 @@ public class UserClient extends BaseClient {
     }
 
     public ResponseEntity<Object> findUserById(long id) {
-        return get("/", id);
+        return get("/" + id);
     }
 
     public ResponseEntity<Object> updateUser(long id, UserDto dto) {
-        return patch("/", id, dto);
+        return patch("/" + id, dto);
     }
 
     public ResponseEntity<Object> deleteUser(long id) {
-        return delete("/", id);
+        return delete("/" + id);
     }
 }

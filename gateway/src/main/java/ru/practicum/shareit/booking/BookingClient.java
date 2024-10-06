@@ -32,10 +32,7 @@ public class BookingClient extends BaseClient {
     }
 
     public ResponseEntity<Object> changeStatus(long id, boolean approved, long userId) {
-        Map<String, Object> params = Map.of(
-                "approved", approved
-        );
-        return patch("/" + id, userId, params, null);
+        return patch("/" + id + "?approved=" + approved, userId);
     }
 
 

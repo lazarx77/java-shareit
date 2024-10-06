@@ -13,5 +13,4 @@ public interface ItemRequestRepository extends JpaRepository<ItemRequest, Long> 
 
     @Query("select ir from ItemRequest ir where ir.requestor.id <> :userId order by ir.created desc")
     List<ItemRequest> findAllExcludedByUserIdDesc(@Param("userId") Long userId);
-
 }

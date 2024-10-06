@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.CommentDto;
-import ru.practicum.shareit.item.dto.ItemRequestDto;
+import ru.practicum.shareit.item.dto.ItemDto;
 
 @Controller
 @RequestMapping(path = "/items")
@@ -19,7 +19,7 @@ public class ItemController {
 
     @PostMapping
     public ResponseEntity<Object> addItem(@Positive @RequestHeader("X-Sharer-User-Id") Long userId,
-                                          @Validated @RequestBody ItemRequestDto dto) {
+                                          @Validated @RequestBody ItemDto dto) {
         log.info("Добавление предмета пользователем userId={}", userId);
         return itemClient.addItem(userId, dto);
     }
@@ -27,7 +27,7 @@ public class ItemController {
     @PatchMapping("/{itemId}")
     public ResponseEntity<Object> updateItem(@Positive @RequestHeader("X-Sharer-User-Id") Long userId,
                                              @Positive @PathVariable("itemId") Long id,
-                                             @RequestBody ItemRequestDto dto) {
+                                             @RequestBody ItemDto dto) {
         log.info("Обновление предмета пользователем userId={}", userId);
         return itemClient.updateItem(userId, id, dto);
     }
@@ -52,7 +52,7 @@ public class ItemController {
         return itemClient.searchItems(userId, text);
     }
 
-    @PostMapping("/{itemId}/comments")
+    @PostMapping("/{itemId}/comment")
     public ResponseEntity<Object> addComment(@Positive @RequestHeader("X-Sharer-User-Id") Long authorId,
                                              @Positive @PathVariable("itemId") Long itemId,
                                              @RequestBody CommentDto dto) {

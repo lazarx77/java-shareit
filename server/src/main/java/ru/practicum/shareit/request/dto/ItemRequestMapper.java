@@ -7,6 +7,7 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.request.model.ItemRequest;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -26,8 +27,11 @@ public class ItemRequestMapper {
         itemRequestDto.setCreated(itemRequest.getCreated());
         itemRequestDto.setDescription(itemRequest.getDescription());
         List<Item> items = itemService.getItemsByRequestId(itemRequest.getId());
-        if(!items.isEmpty()) {
+
+        if (items != null && !items.isEmpty()) {
             itemRequestDto.setItems(items.stream().map(ItemRequestResponseMapper::mapToItemRequestResponse).toList());
+        } else {
+            itemRequestDto.setItems(Collections.emptyList());
         }
         return itemRequestDto;
     }

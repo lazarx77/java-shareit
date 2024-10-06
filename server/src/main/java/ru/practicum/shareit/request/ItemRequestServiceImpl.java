@@ -45,6 +45,8 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     public ItemRequest getRequestById(Long userId, Long requestId) {
         log.info("Проверка наличия пользователя при поиске конкретного запроса с id = {} в БД", userId);
         userService.findUserById(userId);
+        log.info("Пользователь userId={}", userId);
+        log.info("Запрос requestId={}", requestId);
         return itemRequestRepository.findById(requestId)
                 .orElseThrow(() -> new NotFoundException("Такой запрос с id = " + requestId + " не найден "));
     }

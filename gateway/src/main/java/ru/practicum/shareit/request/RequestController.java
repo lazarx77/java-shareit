@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitterReturnValueHandler;
 import ru.practicum.shareit.request.dto.NewItemRequestDto;
 
 @Controller
@@ -27,7 +26,7 @@ public class RequestController {
 
     @GetMapping
     public ResponseEntity<Object> getRequestsOfRequestor(@Positive
-                                                             @RequestHeader("X-Sharer-User-Id") long requestorId) {
+                                                         @RequestHeader("X-Sharer-User-Id") long requestorId) {
         log.info("Получение запросов пользователя requestirId={}", requestorId);
         return requestClient.getRequestsOfRequestor(requestorId);
     }

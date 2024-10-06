@@ -5,9 +5,9 @@ import lombok.Data;
 @Data
 public class ItemRequestResponseDto {
 
-    Long itemId;
+    private Long itemId;
 
-    String name;
+    private String name;
 
-    Long ownerId;
+    private Long ownerId;
 }

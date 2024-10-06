@@ -50,7 +50,6 @@ public class ItemRequestController {
                                          @PathVariable("requestId") Long requestId) {
         ItemRequestDto dto = ItemRequestMapper.mapToItemRequestDto(itemRequestService.getRequestById(userId, requestId), itemService);
         log.info(dto.toString());
-//        return ItemRequestMapper.mapToItemRequestDto(itemRequestService.getRequestById(userId, requestId), itemService);
         return dto;
     }
 }

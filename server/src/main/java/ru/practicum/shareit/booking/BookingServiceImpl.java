@@ -90,7 +90,6 @@ public class BookingServiceImpl implements BookingService {
      */
     @Override
     public List<Booking> findAllBookingsOfBooker(Long userId, State state) {
-        final LocalDateTime now = LocalDateTime.now();
         log.info("Проверка наличия пользователя в БД при получении списка всех бронирований");
         userService.findUserById(userId);
         log.info("STATE " + state);
@@ -99,11 +98,11 @@ public class BookingServiceImpl implements BookingService {
             case ALL -> bookingList = bookingRepository.findAllBookingsByBooker_idOrderByStartDesc(userId);
             case CURRENT -> bookingList = bookingRepository
                     .findAllByBooker_idAndStartBeforeAndEndAfterOrderByStartDesc(userId,
-                            now, now);
+                            LocalDateTime.now(), LocalDateTime.now());
             case PAST -> bookingList = bookingRepository
-                    .findAllByBooker_idAndEndAfterOrderByStartDesc(userId, now);
+                    .findAllByBooker_idAndEndAfterOrderByStartDesc(userId, LocalDateTime.now());
             case FUTURE -> bookingList = bookingRepository
-                    .findAllByBooker_idAndStartAfterOrderByStartDesc(userId, now);
+                    .findAllByBooker_idAndStartAfterOrderByStartDesc(userId, LocalDateTime.now());
             case WAITING ->
                     bookingList = bookingRepository.findAllByBooker_idAndStatusOrderByStartDesc(userId, Status.WAITING);
             case REJECTED ->
@@ -121,17 +120,16 @@ public class BookingServiceImpl implements BookingService {
      */
     @Override
     public List<Booking> findAllBookingsOfOwner(Long userId, State state) {
-        final LocalDateTime now = LocalDateTime.now();
         List<Booking> bookingList;
         switch (state) {
             case ALL -> bookingList = bookingRepository.findAllByItem_Owner_idOrderByStartDesc(userId);
             case CURRENT -> bookingList = bookingRepository
                     .findAllByItem_Owner_idAndStartBeforeAndEndAfterOrderByStartDesc(userId,
-                            now, now);
+                            LocalDateTime.now(), LocalDateTime.now());
             case PAST -> bookingList = bookingRepository
-                    .findAllByItem_Owner_idAndEndAfterOrderByStartDesc(userId, now);
+                    .findAllByItem_Owner_idAndEndAfterOrderByStartDesc(userId, LocalDateTime.now());
             case FUTURE -> bookingList = bookingRepository
-                    .findAllByItem_Owner_idAndStartAfterOrderByStartDesc(userId, now);
+                    .findAllByItem_Owner_idAndStartAfterOrderByStartDesc(userId, LocalDateTime.now());
             case WAITING -> bookingList = bookingRepository
                     .findAllByItem_Owner_idAndStatusOrderByStartDesc(userId, Status.WAITING);
             case REJECTED -> bookingList = bookingRepository
@@ -149,12 +147,11 @@ public class BookingServiceImpl implements BookingService {
      */
     @Override
     public Booking findLastBooking(Item item) {
-        final LocalDateTime now = LocalDateTime.now();
         return bookingRepository
                 .findFirstByItem_Owner_idAndStartBeforeOrderByStartDesc(itemService
                         .getItem(item.getId())
                         .getOwner()
-                        .getId(), now)
+                        .getId(), LocalDateTime.now())
                 .orElse(null);
     }
 
@@ -163,10 +160,9 @@ public class BookingServiceImpl implements BookingService {
      */
     @Override
     public Booking findFutureBooking(Item item) {
-        final LocalDateTime now = LocalDateTime.now();
         return bookingRepository
                 .findFirstByItem_Owner_idAndStartAfterOrderByStartAsc(itemService
                         .getItem(item.getId()).getOwner()
-                        .getId(), now).orElse(null);
+                        .getId(), LocalDateTime.now()).orElse(null);
     }
 }

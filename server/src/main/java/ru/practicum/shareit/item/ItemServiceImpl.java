@@ -121,9 +121,8 @@ public class ItemServiceImpl implements ItemService {
      */
     @Override
     public Comment addComment(Long authorId, Long itemId, CommentDto dto) {
-        final LocalDateTime now = LocalDateTime.now();
         log.info("Добавление комментария для предмета с id={}, authorId={}, dto={}", itemId, authorId, dto);
-        Booking booking = bookingRepository.findByItemIdAndBookerIdAndEndBefore(itemId, authorId, now)
+        Booking booking = bookingRepository.findByItemIdAndBookerIdAndEndBefore(itemId, authorId, LocalDateTime.now())
                 .orElseThrow(() -> new ValidationException("Бронь с указанными параметрами не существует - " +
                         "при добавлении комментария"));
         User booker = booking.getBooker();

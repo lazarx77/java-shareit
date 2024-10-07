@@ -35,7 +35,7 @@ public class BookingController {
         log.info("Проверка на пересечение времени прошла успешно");
         log.info("Текущее время {}", now);
         log.info("Время начала {} и окончания {} брони", requestDto.getStart(), requestDto.getEnd());
-        log.info("Создаем бронь {}, userId={}", requestDto, userId);
+        log.info("Создаем бронь предмета id={}, userId={}", requestDto.getItemId(), userId);
         return bookingClient.bookItem(userId, requestDto);
     }
 
@@ -57,8 +57,10 @@ public class BookingController {
     @GetMapping
     public ResponseEntity<Object> getBookings(@Positive @RequestHeader("X-Sharer-User-Id") long userId,
                                               @RequestParam(name = "state", defaultValue = "all") String stateParam,
-                                              @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from,
-                                              @Positive @RequestParam(name = "size", defaultValue = "10") Integer size) {
+                                              @PositiveOrZero @RequestParam(name = "from", defaultValue = "0")
+                                              Integer from,
+                                              @Positive @RequestParam(name = "size", defaultValue = "10")
+                                              Integer size) {
         BookingState state = BookingState.from(stateParam)
                 .orElseThrow(() -> new IllegalArgumentException("Unknown state: " + stateParam));
         log.info("Получаем брони в state {}, userId={}, from={}, size={}", stateParam, userId, from, size);
@@ -67,7 +69,8 @@ public class BookingController {
 
     @GetMapping("/owner")
     public ResponseEntity<Object> getBookingsOFOwner(@Positive @RequestHeader("X-Sharer-User-Id") Long userId,
-                                                     @RequestParam(name = "state", defaultValue = "all") String stateParam) {
+                                                     @RequestParam(name = "state", defaultValue = "all")
+                                                     String stateParam) {
         BookingState state = BookingState.from(stateParam)
                 .orElseThrow(() -> new IllegalArgumentException("Unknown state: " + stateParam));
         log.info("Получаем брони владельца в state {}, userId={}", stateParam, userId);

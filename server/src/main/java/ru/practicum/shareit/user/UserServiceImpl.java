@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository
                 .findById(id)
                 .orElseThrow(() -> new NotFoundException("Пользователь с таким id = "
-                        + updatedUser.getId() + " не существует"));
+                        + id + " не существует"));
         updatedUser.setId(id);
         if (updatedUser.getEmail() != null) {
             UserValidator.checkEmailIsUnique(userRepository.findUserByEmail(updatedUser.getEmail()));
@@ -68,6 +68,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User findUserById(Long id) {
+        log.info("Поиск пользователя с id={}", id);
         return userRepository
                 .findById(id)
                 .orElseThrow(() -> new NotFoundException("Пользователь с таким id = " + id + " не существует"));

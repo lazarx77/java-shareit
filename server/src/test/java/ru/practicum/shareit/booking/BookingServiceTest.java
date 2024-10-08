@@ -215,4 +215,183 @@ class BookingServiceTest {
 
         assertNull(foundBooking);
     }
+
+    @Test
+    void findAllBookingsOfBooker_whenStateIsAll_thenAllBookingsReturned() {
+        when(userService.findUserById(user.getId())).thenReturn(user);
+        Booking booking1 = new Booking(1L, LocalDateTime.now(), LocalDateTime.now().plusDays(1), item, user, Status.WAITING);
+        Booking booking2 = new Booking(2L, LocalDateTime.now().plusDays(3), LocalDateTime.now().plusDays(4), item, user, Status.APPROVED);
+        when(bookingRepository.findAllBookingsByBooker_idOrderByStartDesc(user.getId())).thenReturn(List.of(booking1, booking2));
+
+        List<Booking> bookings = bookingService.findAllBookingsOfBooker(user.getId(), State.ALL);
+
+        assertEquals(2, bookings.size());
+        assertEquals(booking1, bookings.get(0));
+        assertEquals(booking2, bookings.get(1));
+    }
+
+    @Test
+    void findAllBookingsOfBooker_whenStateIsCurrent_thenCurrentBookingsReturned() {
+        when(userService.findUserById(user.getId())).thenReturn(user);
+        Booking currentBooking = new Booking(1L, LocalDateTime.now().minusHours(1), LocalDateTime.now().plusHours(1), item, user, Status.WAITING);
+        when(bookingRepository.findAllByBooker_idAndStartBeforeAndEndAfterOrderByStartDesc(anyLong(), any(LocalDateTime.class), any(LocalDateTime.class))).thenReturn(List.of(currentBooking));
+
+        List<Booking> bookings = bookingService.findAllBookingsOfBooker(user.getId(), State.CURRENT);
+
+        assertEquals(1, bookings.size());
+        assertEquals(currentBooking, bookings.get(0));
+    }
+
+    @Test
+    void findAllBookingsOfBooker_whenStateIsPast_thenPastBookingsReturned() {
+        when(userService.findUserById(user.getId())).thenReturn(user);
+        Booking pastBooking = new Booking(1L, LocalDateTime.now().minusDays(2), LocalDateTime.now().minusDays(1), item, user, Status.APPROVED);
+        when(bookingRepository.findAllByBooker_idAndEndAfterOrderByStartDesc(anyLong(), any(LocalDateTime.class))).thenReturn(List.of(pastBooking));
+
+        List<Booking> bookings = bookingService.findAllBookingsOfBooker(user.getId(), State.PAST);
+
+        assertEquals(1, bookings.size());
+        assertEquals(pastBooking, bookings.get(0));
+    }
+
+    @Test
+    void findAllBookingsOfBooker_whenStateIsFuture_thenFutureBookingsReturned() {
+        when(userService.findUserById(user.getId())).thenReturn(user);
+        Booking futureBooking = new Booking(1L, LocalDateTime.now().plusDays(1), LocalDateTime.now().plusDays(2), item, user, Status.WAITING);
+        when(bookingRepository.findAllByBooker_idAndStartAfterOrderByStartDesc(anyLong(), any(LocalDateTime.class))).thenReturn(List.of(futureBooking));
+
+        List<Booking> bookings = bookingService.findAllBookingsOfBooker(user.getId(), State.FUTURE);
+
+        assertEquals(1, bookings.size());
+        assertEquals(futureBooking, bookings.get(0));
+    }
+
+    @Test
+    void findAllBookingsOfBooker_whenStateIsWaiting_thenWaitingBookingsReturned() {
+        when(userService.findUserById(user.getId())).thenReturn(user);
+        Booking waitingBooking = new Booking(1L, LocalDateTime.now(), LocalDateTime.now().plusDays(1), item, user, Status.WAITING);
+        when(bookingRepository.findAllByBooker_idAndStatusOrderByStartDesc(user.getId(), Status.WAITING)).thenReturn(List.of(waitingBooking));
+
+        List<Booking> bookings = bookingService.findAllBookingsOfBooker(user.getId(), State.WAITING);
+
+        assertEquals(1, bookings.size());
+        assertEquals(waitingBooking, bookings.get(0));
+    }
+
+    @Test
+    void findAllBookingsOfBooker_whenStateIsRejected_thenRejectedBookingsReturned() {
+        when(userService.findUserById(user.getId())).thenReturn(user);
+        Booking rejectedBooking = new Booking(1L, LocalDateTime.now(), LocalDateTime.now().plusDays(1), item, user, Status.REJECTED);
+        when(bookingRepository.findAllByBooker_idAndStatusOrderByStartDesc(user.getId(), Status.REJECTED)).thenReturn(List.of(rejectedBooking));
+
+        List<Booking> bookings = bookingService.findAllBookingsOfBooker(user.getId(), State.REJECTED);
+
+        assertEquals(1, bookings.size());
+        assertEquals(rejectedBooking, bookings.get(0));
+    }
+
+
+    @Test
+    void findAllBookingsOfOwner_whenStateIsAll_thenAllBookingsReturned() {
+        Booking booking1 = new Booking(1L, LocalDateTime.now(), LocalDateTime.now().plusDays(1), item, user, Status.WAITING);
+        Booking booking2 = new Booking(2L, LocalDateTime.now().plusDays(3), LocalDateTime.now().plusDays(4), item, user, Status.APPROVED);
+        when(bookingRepository.findAllByItem_Owner_idOrderByStartDesc(owner.getId())).thenReturn(List.of(booking1, booking2));
+
+        List<Booking> bookings = bookingService.findAllBookingsOfOwner(owner.getId(), State.ALL);
+
+        assertEquals(2, bookings.size());
+        assertEquals(booking1, bookings.get(0));
+        assertEquals(booking2, bookings.get(1));
+    }
+
+    @Test
+    void findAllBookingsOfOwner_whenStateIsCurrent_thenCurrentBookingsReturned() {
+        Booking currentBooking = new Booking(1L, LocalDateTime.now().minusHours(1), LocalDateTime.now().plusHours(1), item, user, Status.WAITING);
+        when(bookingRepository.findAllByItem_Owner_idAndStartBeforeAndEndAfterOrderByStartDesc(anyLong(), any(LocalDateTime.class), any(LocalDateTime.class))).thenReturn(List.of(currentBooking));
+
+        List<Booking> bookings = bookingService.findAllBookingsOfOwner(owner.getId(), State.CURRENT);
+
+        assertEquals(1, bookings.size());
+        assertEquals(currentBooking, bookings.get(0));
+    }
+
+    @Test
+    void findAllBookingsOfOwner_whenStateIsPast_thenPastBookingsReturned() {
+        Booking pastBooking = new Booking(1L, LocalDateTime.now().minusDays(2), LocalDateTime.now().minusDays(1), item, user, Status.APPROVED);
+        when(bookingRepository.findAllByItem_Owner_idAndEndAfterOrderByStartDesc(anyLong(), any(LocalDateTime.class))).thenReturn(List.of(pastBooking));
+
+        List<Booking> bookings = bookingService.findAllBookingsOfOwner(owner.getId(), State.PAST);
+
+        assertEquals(1, bookings.size());
+        assertEquals(pastBooking, bookings.get(0));
+    }
+
+    @Test
+    void findAllBookingsOfOwner_whenStateIsFuture_thenFutureBookingsReturned() {
+        Booking futureBooking = new Booking(1L, LocalDateTime.now().plusDays(1), LocalDateTime.now().plusDays(2), item, user, Status.WAITING);
+        when(bookingRepository.findAllByItem_Owner_idAndStartAfterOrderByStartDesc(anyLong(), any(LocalDateTime.class))).thenReturn(List.of(futureBooking));
+
+        List<Booking> bookings = bookingService.findAllBookingsOfOwner(owner.getId(), State.FUTURE);
+
+        assertEquals(1, bookings.size());
+        assertEquals(futureBooking, bookings.get(0));
+    }
+
+    @Test
+    void findAllBookingsOfOwner_whenStateIsWaiting_thenWaitingBookingsReturned() {
+        Booking waitingBooking = new Booking(1L, LocalDateTime.now(), LocalDateTime.now().plusDays(1), item, user, Status.WAITING);
+        when(bookingRepository.findAllByItem_Owner_idAndStatusOrderByStartDesc(owner.getId(), Status.WAITING)).thenReturn(List.of(waitingBooking));
+
+        List<Booking> bookings = bookingService.findAllBookingsOfOwner(owner.getId(), State.WAITING);
+
+        assertEquals(1, bookings.size());
+        assertEquals(waitingBooking, bookings.get(0));
+    }
+
+    @Test
+    void findAllBookingsOfOwner_whenStateIsRejected_thenRejectedBookingsReturned() {
+        Booking rejectedBooking = new Booking(1L, LocalDateTime.now(), LocalDateTime.now().plusDays(1), item, user, Status.REJECTED);
+        when(bookingRepository.findAllByItem_Owner_idAndStatusOrderByStartDesc(owner.getId(), Status.REJECTED)).thenReturn(List.of(rejectedBooking));
+
+        List<Booking> bookings = bookingService.findAllBookingsOfOwner(owner.getId(), State.REJECTED);
+
+        assertEquals(1, bookings.size());
+        assertEquals(rejectedBooking, bookings.get(0));
+    }
+
+
+    @Test
+    void findAllBookingsOfOwner_whenStateIsCurrentAndNoBookingsExist_thenItemDoNotBelongToUserThrown() {
+        when(bookingRepository.findAllByItem_Owner_idAndStartBeforeAndEndAfterOrderByStartDesc(anyLong(), any(LocalDateTime.class), any(LocalDateTime.class))).thenReturn(Collections.emptyList());
+
+        assertThrows(ItemDoNotBelongToUser.class, () -> bookingService.findAllBookingsOfOwner(owner.getId(), State.CURRENT));
+    }
+
+    @Test
+    void findAllBookingsOfOwner_whenStateIsPastAndNoBookingsExist_thenItemDoNotBelongToUserThrown() {
+        when(bookingRepository.findAllByItem_Owner_idAndEndAfterOrderByStartDesc(anyLong(), any(LocalDateTime.class))).thenReturn(Collections.emptyList());
+
+        assertThrows(ItemDoNotBelongToUser.class, () -> bookingService.findAllBookingsOfOwner(owner.getId(), State.PAST));
+    }
+
+    @Test
+    void findAllBookingsOfOwner_whenStateIsFutureAndNoBookingsExist_thenItemDoNotBelongToUserThrown() {
+        when(bookingRepository.findAllByItem_Owner_idAndStartAfterOrderByStartDesc(anyLong(), any(LocalDateTime.class))).thenReturn(Collections.emptyList());
+
+        assertThrows(ItemDoNotBelongToUser.class, () -> bookingService.findAllBookingsOfOwner(owner.getId(), State.FUTURE));
+    }
+
+    @Test
+    void findAllBookingsOfOwner_whenStateIsWaitingAndNoBookingsExist_thenEmptyListReturned() {
+        when(bookingRepository.findAllByItem_Owner_idAndStatusOrderByStartDesc(owner.getId(), Status.WAITING)).thenReturn(Collections.emptyList());
+
+        assertThrows(ItemDoNotBelongToUser.class, () -> bookingService.findAllBookingsOfOwner(owner.getId(), State.WAITING));
+    }
+
+    @Test
+    void findAllBookingsOfOwner_whenStateIsRejectedAndNoBookingsExist_thenEmptyListReturned() {
+        when(bookingRepository.findAllByItem_Owner_idAndStatusOrderByStartDesc(owner.getId(), Status.REJECTED)).thenReturn(Collections.emptyList());
+
+        assertThrows(ItemDoNotBelongToUser.class, () -> bookingService.findAllBookingsOfOwner(owner.getId(), State.REJECTED));
+    }
 }

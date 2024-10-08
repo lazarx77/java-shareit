@@ -112,7 +112,6 @@ public class BookingServiceImpl implements BookingService {
         }
         if (bookingList.isEmpty()) {
             bookingList = Collections.emptyList();
-//            throw new ItemDoNotBelongToUser("Брони не существует для данного пользователя");
         }
         return bookingList;
     }
@@ -139,7 +138,6 @@ public class BookingServiceImpl implements BookingService {
             default -> throw new IllegalArgumentException("Неизвестное состояние: " + state);
         }
         if (bookingList.isEmpty()) {
-//            bookingList = Collections.emptyList();
             throw new ItemDoNotBelongToUser("Брони не существует для данного пользователя");
         }
         return bookingList;

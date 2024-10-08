@@ -322,7 +322,6 @@ public class BookingServiceIT {
 
     @Test
     void findAllBookingsOfOwner_whenUserExists_thenBookingsReturned() {
-        // given
         User user = new User();
         user.setId(1L);
         user.setEmail("user@example.com");
@@ -341,7 +340,6 @@ public class BookingServiceIT {
         bookingAddDto.setEnd(LocalDateTime.now().plusDays(2));
         bookingAddDto.setItemId(item.getId());
 
-        // Пользователь бронирует предмет
         User booker = new User();
         booker.setId(2L);
         booker.setEmail("booker@example.com");
@@ -367,44 +365,6 @@ public class BookingServiceIT {
         user.setName("User Name");
         userService.addUser(user);
 
-        // when
         assertThrows(ItemDoNotBelongToUser.class, () -> bookingService.findAllBookingsOfOwner(user.getId(), State.ALL));
-//        List<Booking> bookings = bookingService.findAllBookingsOfOwner(user.getId(), State.ALL);
-
-        // then
-//        assertEquals(0, bookings.size());
     }
-
-//    @Test
-//    void findAllBookingsOfOwner_whenUserIsNotOwner_thenItemDoNotBelongToUserExceptionThrown() {
-//        // given
-//        User user1 = new User();
-//        user1.setId(1L);
-//        user1.setEmail("user1@example.com");
-//        user1.setName("User One");
-//        userService.addUser(user1);
-//
-//        User user2 = new User();
-//        user2.setId(2L);
-//        user2.setEmail("user2@example.com");
-//        user2.setName("User Two");
-//        userService.addUser(user2);
-//
-//        ItemDto itemDto = new ItemDto();
-//        itemDto.setId(1L);
-//        itemDto.setAvailable(true);
-//        itemDto.setName("Item Name");
-//        itemDto.setDescription("Item Description");
-//        itemService.addNewItem(user1.getId(), itemDto);
-//
-//        BookingAddDto bookingAddDto = new BookingAddDto();
-//        bookingAddDto.setStart(LocalDateTime.now().plusDays(1));
-//        bookingAddDto.setEnd(LocalDateTime.now().plusDays(2));
-//        bookingAddDto.setItemId(itemDto.getId());
-//
-//        bookingService.addBooking(bookingAddDto, user2.getId());
-//
-//        // when and then
-//        assertThrows(ItemDoNotBelongToUser.class, () -> bookingService.findAllBookingsOfOwner(user2.getId(), State.ALL));
-//    }
 }

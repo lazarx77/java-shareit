@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 @ActiveProfiles("test")
-class UserServiceImplIT {
+class UserServiceIT {
 
     @Autowired
     private UserService userService;
@@ -63,7 +63,7 @@ class UserServiceImplIT {
 
     @Test
     void updateUser_whenUserExists_userIsUpdated() {
-        userService.addUser(user);
+        user = userService.addUser(user);
         User updatedUser = new User(1L, "updatedName", "updatedEmail@mail.ru");
         User result = userService.updateUser(user.getId(), updatedUser);
 

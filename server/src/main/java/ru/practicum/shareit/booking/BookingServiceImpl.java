@@ -16,6 +16,7 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.UserService;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -110,7 +111,8 @@ public class BookingServiceImpl implements BookingService {
             default -> throw new IllegalArgumentException("Неизвестное состояние: " + state);
         }
         if (bookingList.isEmpty()) {
-            throw new ItemDoNotBelongToUser("Брони не существует для данного пользователя");
+            bookingList = Collections.emptyList();
+//            throw new ItemDoNotBelongToUser("Брони не существует для данного пользователя");
         }
         return bookingList;
     }
@@ -137,6 +139,7 @@ public class BookingServiceImpl implements BookingService {
             default -> throw new IllegalArgumentException("Неизвестное состояние: " + state);
         }
         if (bookingList.isEmpty()) {
+//            bookingList = Collections.emptyList();
             throw new ItemDoNotBelongToUser("Брони не существует для данного пользователя");
         }
         return bookingList;

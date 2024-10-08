@@ -1,6 +1,7 @@
 package ru.practicum.shareit.booking.dto;
 
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.booking.Status;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
  * бронируемого предмета, а также информацию о пользователе, который делает бронирование.
  */
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
 public class BookingAddDto {
 

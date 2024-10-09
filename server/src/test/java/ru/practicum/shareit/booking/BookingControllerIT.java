@@ -33,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * <p>
  * Этот класс содержит тесты, которые проверяют функциональность контроллера
  * бронирования, включая добавление бронирования, изменение статуса,
- * поиск конкретного бронирования и получение всех бронирований.
+ * поиск конкретного бронирования и получение всех бронирований .
  */
 @WebMvcTest(BookingController.class)
 class BookingControllerIT {

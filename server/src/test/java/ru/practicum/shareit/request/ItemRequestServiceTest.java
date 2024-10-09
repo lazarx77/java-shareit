@@ -18,6 +18,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
+/**
+ * Тестовый класс для проверки функциональности сервиса ItemRequestService.
+ */
 @ExtendWith(MockitoExtension.class)
 class ItemRequestServiceTest {
 
@@ -113,7 +116,7 @@ class ItemRequestServiceTest {
         when(userService.findUserById(user.getId())).thenReturn(user);
         when(itemRequestRepository.findById(itemRequest.getId())).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> itemRequestService.getRequestById(user.getId(), itemRequest.getId()));
+        assertThrows(NotFoundException.class, () ->
+                itemRequestService.getRequestById(user.getId(), itemRequest.getId()));
     }
 }
-

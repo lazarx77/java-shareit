@@ -15,6 +15,10 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Тестовый класс для проверки функциональности репозитория ItemRepository.
+ * Использует аннотацию @DataJpaTest для настройки контекста Spring и тестирования JPA.
+ */
 @DataJpaTest
 public class ItemRepositoryIT {
 

@@ -10,6 +10,9 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Интеграционный тестовый класс для проверки функциональности репозитория UserRepository.
+ */
 @DataJpaTest
 public class UserRepositoryIT {
 

@@ -20,6 +20,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.when;
 
+/**
+ * Тесты для класса ItemMapper, который отвечает за преобразование
+ * объектов Item и ItemDto, а также за получение комментариев и бронирований.
+ */
 @ExtendWith(MockitoExtension.class)
 class ItemMapperTest {
 

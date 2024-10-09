@@ -32,6 +32,12 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
             " or upper(i.description) like upper(concat('%', ?1, '%'))")
     List<Item> search(String text);
 
+    /**
+     * Находит все предметы, связанные с указанным идентификатором запроса.
+     *
+     * @param requestId идентификатор запроса, по которому необходимо найти предметы
+     * @return список предметов, связанных с указанным запросом
+     */
     @Query("SELECT i FROM Item i WHERE i.request.id = ?1")
     List<Item> findAllByRequestId(Long requestId);
 }

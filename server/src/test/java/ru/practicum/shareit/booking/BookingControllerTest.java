@@ -22,6 +22,13 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
+/**
+ * Тестовый класс для контроллера BookingController.
+ * <p>
+ * Этот класс содержит юнит-тесты, которые проверяют функциональность методов
+ * контроллера бронирования, включая добавление бронирования, изменение статуса,
+ * поиск конкретного бронирования и получение всех бронирований.
+ */
 @ExtendWith(MockitoExtension.class)
 class BookingControllerTest {
 

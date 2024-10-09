@@ -20,6 +20,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * Интеграционные тесты для контроллера предметов.
+ * Проверяет корректность обработки запросов к API предметов.
+ */
 @WebMvcTest(ItemController.class)
 class ItemControllerIT {
 
@@ -170,4 +174,3 @@ class ItemControllerIT {
                 .andExpect(status().isBadRequest());
     }
 }
-

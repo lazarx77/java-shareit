@@ -79,5 +79,11 @@ public interface ItemService {
      */
     List<Comment> getComments(Long itemId);
 
+    /**
+     * Получает список предметов, связанных с указанным идентификатором запроса.
+     *
+     * @param requestId идентификатор запроса, по которому необходимо получить предметы
+     * @return список предметов, связанных с указанным запросом
+     */
     List<Item> getItemsByRequestId(Long requestId);
 }

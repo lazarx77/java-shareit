@@ -26,6 +26,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * Интеграционные тесты для контроллера ItemController.
+ * <p>
+ * Данный класс тестирует функциональность контроллера, который обрабатывает
+ * HTTP-запросы, связанные с предметами (items).
+ */
 @WebMvcTest(ItemController.class)
 class ItemControllerIT {
 
@@ -44,7 +50,8 @@ class ItemControllerIT {
     @SneakyThrows
     @Test
     void add_whenInvoked_ItemReturnedAndStatusIsOk() {
-        ItemDto itemDto = new ItemDto(1L, "Test Item Name", "Test Description", true, null, null, null, null);
+        ItemDto itemDto = new ItemDto(1L, "Test Item Name", "Test Description",
+                true, null, null, null, null);
         User owner = new User(1L, "name", "email@email.ru");
         Item item = new Item(1L, "Test Item Name", "Test Description", true, owner, null);
         when(itemService.addNewItem(anyLong(), any(ItemDto.class))).thenReturn(item);
@@ -64,7 +71,8 @@ class ItemControllerIT {
     @SneakyThrows
     @Test
     void updateItem_whenInvoked_ItemReturnedAndStatusIsOk() {
-        ItemDto updatedItemDto = new ItemDto(1L, "Updated Item", "Updated Description", false, null, null, null, null);
+        ItemDto updatedItemDto = new ItemDto(1L, "Updated Item", "Updated Description",
+                false, null, null, null, null);
         User owner = new User(1L, "name", "email@email.ru");
         Item item = new Item(1L, "Updated Item", "Updated Description", false, owner, null);
         when(itemService.updateItem(anyLong(), anyLong(), any(ItemDto.class))).thenReturn(item);
@@ -84,7 +92,8 @@ class ItemControllerIT {
     @SneakyThrows
     @Test
     void getItemDtoById_whenItemFound_thenReturnStatusIsOkAndItemDto() {
-        ItemDto itemDto = new ItemDto(1L, "Test Item", "Test Description", true, null, null, null, null);
+        ItemDto itemDto = new ItemDto(1L, "Test Item", "Test Description", true,
+                null, null, null, null);
         User owner = new User(1L, "name", "email@email.ru");
         Item item = new Item(1L, "Test Item", "Test Description", false, owner, null);
         when(itemService.getItem(1L)).thenReturn(item);

@@ -10,14 +10,23 @@ import ru.practicum.shareit.user.model.User;
 
 import java.util.List;
 
+
+/**
+ * Реализация сервиса для управления запросами на предметы.
+ * Содержит методы для создания и получения запросов,
+ * а также для работы с запросами других пользователей.
+ */
 @Service
 @AllArgsConstructor
 @Slf4j
 public class ItemRequestServiceImpl implements ItemRequestService {
 
-    ItemRequestRepository itemRequestRepository;
-    UserService userService;
+    private final ItemRequestRepository itemRequestRepository;
+    private final UserService userService;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ItemRequest addNewRequest(Long requestorId, ItemRequest itemRequest) {
         log.info("Проверка наличия пользователя с id = {} в БД при добавлении запроса", requestorId);
@@ -27,6 +36,9 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         return itemRequestRepository.save(itemRequest);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<ItemRequest> getRequestsOfRequestor(Long requestorId) {
         log.info("Проверка наличия пользователя при поиске его запросов с id = {} в БД", requestorId);
@@ -34,6 +46,9 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         return itemRequestRepository.findByRequestorIdOrderByCreatedDesc(requestorId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<ItemRequest> getAllRequestsOfOtherUsers(Long userId) {
         log.info("Проверка наличия пользователя при поиске чужих запросов с id = {} в БД", userId);
@@ -41,6 +56,9 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         return itemRequestRepository.findAllExcludedByUserIdDesc(userId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ItemRequest getRequestById(Long userId, Long requestId) {
         log.info("Проверка наличия пользователя при поиске конкретного запроса с id = {} в БД", userId);

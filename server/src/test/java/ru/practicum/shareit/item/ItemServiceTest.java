@@ -30,6 +30,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
+/**
+ * Тестовый класс для проверки функциональности сервиса ItemService.
+ */
 @ExtendWith(MockitoExtension.class)
 class ItemServiceTest {
 
@@ -59,7 +62,8 @@ class ItemServiceTest {
     void setUp() {
         user = new User(1L, "User", "user@example.com");
         item = new Item(1L, "Item", "Description", true, user, null);
-        itemDto = new ItemDto(1L, "Item", "Description", true, null, null, null, null);
+        itemDto = new ItemDto(1L, "Item", "Description",
+                true, null, null, null, null);
     }
 
     @Test
@@ -94,11 +98,13 @@ class ItemServiceTest {
 
     @Test
     void updateItem_whenItemDoesNotBelongToUser_thenThrowItemDoNotBelongToUserException() {
-        Item anotherUserItem = new Item(2L, "Another Item", "Description", true, new User(2L, "Another User", "another@example.com"), null);
+        Item anotherUserItem = new Item(2L, "Another Item", "Description",
+                true, new User(2L, "Another User", "another@example.com"), null);
         when(userService.findUserById(1L)).thenReturn(user);
         when(itemRepository.findById(1L)).thenReturn(Optional.of(anotherUserItem));
 
-        ItemDto updatedItemDto = new ItemDto(1L, "Updated Item", "Updated Description", true, null, null, null, null);
+        ItemDto updatedItemDto = new ItemDto(1L, "Updated Item", "Updated Description",
+                true, null, null, null, null);
 
         Exception exception = assertThrows(ItemDoNotBelongToUser.class, () -> {
             itemService.updateItem(1L, 1L, updatedItemDto);
@@ -112,7 +118,8 @@ class ItemServiceTest {
         when(userService.findUserById(1L)).thenReturn(user);
         when(itemRepository.findById(1L)).thenReturn(Optional.empty());
 
-        ItemDto updatedItemDto = new ItemDto(1L, "Updated Item", "Updated Description", true, null, null, null, null);
+        ItemDto updatedItemDto = new ItemDto(1L, "Updated Item", "Updated Description",
+                true, null, null, null, null);
 
         Exception exception = assertThrows(NotFoundException.class, () -> {
             itemService.updateItem(1L, 1L, updatedItemDto);
@@ -250,7 +257,8 @@ class ItemServiceTest {
             itemService.addComment(1L, 1L, commentDto);
         });
 
-        assertEquals("Бронь с указанными параметрами не существует - при добавлении комментария", exception.getMessage());
+        assertEquals("Бронь с указанными параметрами не существует - при добавлении комментария",
+                exception.getMessage());
     }
 
     @Test

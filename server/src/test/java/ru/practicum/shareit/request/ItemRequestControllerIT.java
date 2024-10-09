@@ -25,6 +25,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * Интеграционный тестовый класс для проверки функциональности контроллера ItemRequestController.
+ */
 @WebMvcTest(ItemRequestController.class)
 class ItemRequestControllerIT {
 
@@ -142,7 +145,8 @@ class ItemRequestControllerIT {
     void getRequestById_whenRequestNotFound_thenReturnStatusIsNotFound() {
         Long userId = 1L;
         Long requestId = 1L;
-        when(itemRequestService.getRequestById(userId, requestId)).thenThrow(new NotFoundException("Запрос с id = " + requestId + " не найден"));
+        when(itemRequestService.getRequestById(userId, requestId)).thenThrow(new NotFoundException("Запрос с id = " +
+                requestId + " не найден"));
 
         mockMvc.perform(get("/requests/{requestId}", requestId)
                         .header("X-Sharer-User-Id", userId))
@@ -150,6 +154,7 @@ class ItemRequestControllerIT {
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.error").value("Ошибка с входными параметрами."))
-                .andExpect(jsonPath("$.description").value("Запрос с id = " + requestId + " не найден"));
+                .andExpect(jsonPath("$.description").value("Запрос с id = " +
+                        requestId + " не найден"));
     }
 }

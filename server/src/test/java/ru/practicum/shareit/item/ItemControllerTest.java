@@ -22,6 +22,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
+/**
+ * Тесты для контроллера ItemController.
+ * <p>
+ * Данный класс содержит тесты для проверки функциональности контроллера,
+ * который обрабатывает HTTP-запросы, связанные с предметами (items).
+ */
 @ExtendWith(MockitoExtension.class)
 class ItemControllerTest {
 

@@ -2,7 +2,8 @@ package ru.practicum.shareit.request;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.ItemService;
@@ -18,6 +19,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
+/**
+ * Тестовый класс для проверки функциональности контроллера ItemRequestController.
+ */
 @ExtendWith(MockitoExtension.class)
 class ItemRequestControllerTest {
 
@@ -41,7 +45,8 @@ class ItemRequestControllerTest {
         ItemRequest actualRequest = itemRequestController.add(requestorId, newItemRequestDto);
 
         assertEquals(itemRequest, actualRequest);
-        verify(itemRequestService, times(1)).addNewRequest(requestorId, ItemRequestMapper.mapToItemRequest(newItemRequestDto));
+        verify(itemRequestService, times(1)).addNewRequest(requestorId,
+                ItemRequestMapper.mapToItemRequest(newItemRequestDto));
     }
 
     @Test
@@ -78,7 +83,7 @@ class ItemRequestControllerTest {
         expectedRequestDto.setId(requestId);
 
         when(itemRequestService.getRequestById(userId, requestId)).thenReturn(itemRequest);
-        when(itemService.getItemsByRequestId(requestId)).thenReturn(Collections.emptyList()); // Mock itemService response
+        when(itemService.getItemsByRequestId(requestId)).thenReturn(Collections.emptyList());
 
         ItemRequestDto actualRequestDto = itemRequestController.getRequestById(userId, requestId);
 
@@ -90,7 +95,8 @@ class ItemRequestControllerTest {
     void getRequestById_whenRequestNotFound_thenNotFoundExceptionThrown() {
         Long userId = 1L;
         Long requestId = 1L;
-        when(itemRequestService.getRequestById(userId, requestId)).thenThrow(new NotFoundException("Request not found"));
+        when(itemRequestService.getRequestById(userId, requestId))
+                .thenThrow(new NotFoundException("Request not found"));
 
         assertThrows(NotFoundException.class, () -> {
             itemRequestController.getRequestById(userId, requestId);

@@ -22,6 +22,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/**
+ * Интеграционные тесты для контроллера бронирования.
+ * Проверяет корректность обработки запросов к API бронирования.
+ */
 @WebMvcTest(BookingController.class)
 class BookingControllerIT {
 

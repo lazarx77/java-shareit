@@ -18,6 +18,12 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+/**
+ * Интеграционные тесты для репозитория BookingRepository.
+ * <p>
+ * Этот класс содержит тесты, которые проверяют функциональность методов
+ * репозитория бронирования, включая поиск бронирований по различным критериям.
+ */
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
 class BookingRepositoryIT {
@@ -95,8 +101,8 @@ class BookingRepositoryIT {
     @Test
     void findFirstByItem_Owner_idAndStartAfterOrderByStartAsc_whenFutureBookingExists_thenBookingReturned() {
         Booking futureBooking =
-                bookingRepository.save(new Booking(1L, LocalDateTime.now().plusDays(1), LocalDateTime.now().plusDays(2),
-                        item, user, Status.WAITING));
+                bookingRepository.save(new Booking(1L, LocalDateTime.now().plusDays(1), LocalDateTime.now()
+                        .plusDays(2), item, user, Status.WAITING));
 
         Booking foundBooking = bookingRepository.findFirstByItem_Owner_idAndStartAfterOrderByStartAsc(owner.getId(),
                 LocalDateTime.now()).orElse(null);

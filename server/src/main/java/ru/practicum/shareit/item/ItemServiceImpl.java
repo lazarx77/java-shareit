@@ -144,6 +144,9 @@ public class ItemServiceImpl implements ItemService {
         return commentRepository.findAllByItemId(itemId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Item> getItemsByRequestId(Long requestId) {
         return itemRepository.findAllByRequestId(requestId);

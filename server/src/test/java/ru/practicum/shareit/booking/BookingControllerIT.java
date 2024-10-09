@@ -28,6 +28,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * Интеграционные тесты для контроллера BookingController.
+ * <p>
+ * Этот класс содержит тесты, которые проверяют функциональность контроллера
+ * бронирования, включая добавление бронирования, изменение статуса,
+ * поиск конкретного бронирования и получение всех бронирований .
+ */
 @WebMvcTest(BookingController.class)
 class BookingControllerIT {
 
@@ -47,10 +54,10 @@ class BookingControllerIT {
         bookingAddDto.setItemId(1L);
         bookingAddDto.setStart(LocalDateTime.now().plusDays(1));
         bookingAddDto.setEnd(LocalDateTime.now().plusDays(2));
-        bookingAddDto.setBooker(new User(1L, "bookerName", "bookerEmail@example.com")); // Укажите необходимые поля
+        bookingAddDto.setBooker(new User(1L, "bookerName", "bookerEmail@example.com"));
 
         Booking booking = new Booking(1L, bookingAddDto.getStart(), bookingAddDto.getEnd(),
-                new Item(1L, "itemName", "itemDescription", true, null, null), // Укажите необходимые поля
+                new Item(1L, "itemName", "itemDescription", true, null, null),
                 bookingAddDto.getBooker(), Status.WAITING);
 
         when(bookingService.addBooking(any(), anyLong())).thenReturn(booking);
@@ -72,7 +79,7 @@ class BookingControllerIT {
         Long bookingId = 1L;
         Boolean approved = true;
         Booking booking = new Booking(bookingId, LocalDateTime.now().plusDays(1), LocalDateTime.now().plusDays(2),
-                new Item(1L, "itemName", "itemDescription", true, null, null), // Укажите необходимые поля
+                new Item(1L, "itemName", "itemDescription", true, null, null),
                 new User(1L, "bookerName", "bookerEmail@example.com"), Status.APPROVED);
 
         BookingDto bookingDto = BookingMapper.mapToBookingDto(booking);
@@ -93,7 +100,7 @@ class BookingControllerIT {
     void findSpecificBooking_whenBookingFound_thenReturnStatusIsOkAndBookingDto() {
         Long bookingId = 1L;
         Booking booking = new Booking(bookingId, LocalDateTime.now().plusDays(1), LocalDateTime.now().plusDays(2),
-                new Item(1L, "itemName", "itemDescription", true, null, null), // Укажите необходимые поля
+                new Item(1L, "itemName", "itemDescription", true, null, null),
                 new User(1L, "bookerName", "bookerEmail@example.com"), Status.WAITING);
 
         BookingDto bookingDto = BookingMapper.mapToBookingDto(booking);
@@ -115,7 +122,8 @@ class BookingControllerIT {
     @Test
     void findSpecificBooking_whenBookingNotFound_thenReturnStatusIsNotFoundAndNotFoundExceptionThrown() {
         Long bookingId = 1L;
-        when(bookingService.findSpecificBooking(bookingId, 1L)).thenThrow(new NotFoundException("Бронирование с id = " + bookingId + " не найдено"));
+        when(bookingService.findSpecificBooking(bookingId, 1L))
+                .thenThrow(new NotFoundException("Бронирование с id = " + bookingId + " не найдено"));
 
         mockMvc.perform(get("/bookings/{bookingId}", bookingId)
                         .header("X-Sharer-User-Id", 1L))
@@ -123,7 +131,8 @@ class BookingControllerIT {
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.error").value("Ошибка с входными параметрами."))
-                .andExpect(jsonPath("$.description").value("Бронирование с id = " + bookingId + " не найдено"));
+                .andExpect(jsonPath("$.description")
+                        .value("Бронирование с id = " + bookingId + " не найдено"));
     }
 
     @SneakyThrows
@@ -131,7 +140,7 @@ class BookingControllerIT {
     void findAllBookingsOfBooker_whenInvoked_ListOfBookingDtoReturnedAndStatusIsOk() {
         Long userId = 1L;
         Booking booking = new Booking(1L, LocalDateTime.now().plusDays(1), LocalDateTime.now().plusDays(2),
-                new Item(1L, "itemName", "itemDescription", true, null, null), // Укажите необходимые поля
+                new Item(1L, "itemName", "itemDescription", true, null, null),
                 new User(1L, "bookerName", "bookerEmail@example.com"), Status.WAITING);
 
         when(bookingService.findAllBookingsOfBooker(userId, State.ALL)).thenReturn(Collections.singletonList(booking));
@@ -151,7 +160,7 @@ class BookingControllerIT {
     void findAllBookingsOfOwner_whenInvoked_ListOfBookingDtoReturnedAndStatusIsOk() {
         Long userId = 1L;
         Booking booking = new Booking(1L, LocalDateTime.now().plusDays(1), LocalDateTime.now().plusDays(2),
-                new Item(1L, "itemName", "itemDescription", true, null, null), // Укажите необходимые поля
+                new Item(1L, "itemName", "itemDescription", true, null, null),
                 new User(1L, "bookerName", "bookerEmail@example.com"), Status.WAITING);
 
         when(bookingService.findAllBookingsOfOwner(userId, State.ALL)).thenReturn(Collections.singletonList(booking));

@@ -3,8 +3,6 @@ package ru.practicum.shareit.item.dto;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
-import java.time.LocalDateTime;
-
 /**
  * DTO (Data Transfer Object) для представления комментария.
  * <p>

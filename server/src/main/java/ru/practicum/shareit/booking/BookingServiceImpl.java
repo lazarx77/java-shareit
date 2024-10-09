@@ -106,8 +106,8 @@ public class BookingServiceImpl implements BookingService {
                     .findAllByBooker_idAndStartAfterOrderByStartDesc(userId, LocalDateTime.now());
             case WAITING ->
                     bookingList = bookingRepository.findAllByBooker_idAndStatusOrderByStartDesc(userId, Status.WAITING);
-            case REJECTED ->
-                    bookingList = bookingRepository.findAllByBooker_idAndStatusOrderByStartDesc(userId, Status.REJECTED);
+            case REJECTED -> bookingList = bookingRepository.findAllByBooker_idAndStatusOrderByStartDesc(userId,
+                    Status.REJECTED);
             default -> throw new IllegalArgumentException("Неизвестное состояние: " + state);
         }
         if (bookingList.isEmpty()) {

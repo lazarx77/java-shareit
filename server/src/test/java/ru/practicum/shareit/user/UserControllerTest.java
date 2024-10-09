@@ -15,6 +15,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
+/**
+ * Тестовый класс для проверки функциональности контроллера UserController.
+ */
 @ExtendWith(MockitoExtension.class)
 class UserControllerTest {
 
@@ -68,9 +71,4 @@ class UserControllerTest {
 
         assertEquals(userToUpdate, updatedUser);
     }
-
-//    @Test
-//    void delete() {
-//        when(userService.deleteUser(anyLong())).thenReturn()
-//    }
 }

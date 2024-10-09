@@ -1,6 +1,7 @@
 package ru.practicum.shareit.booking.dto;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * Перечисление, представляющее различные состояния бронирования.
@@ -17,26 +18,23 @@ import java.util.Optional;
  * </p>
  */
 public enum BookingState {
-	ALL,
-	CURRENT,
-	FUTURE,
-	PAST,
-	REJECTED,
-	WAITING;
+    ALL,
+    CURRENT,
+    FUTURE,
+    PAST,
+    REJECTED,
+    WAITING;
 
-	/**
-	 * Преобразует строковое представление состояния бронирования в соответствующий объект {@link BookingState}.
-	 *
-	 * @param stringState строковое представление состояния бронирования
-	 * @return {@link Optional} содержащий соответствующее состояние {@link BookingState}, если оно существует,
-	 *         или {@link Optional#empty()} если состояние не найдено.
-	 */
-	public static Optional<BookingState> from(String stringState) {
-		for (BookingState state : values()) {
-			if (state.name().equalsIgnoreCase(stringState)) {
-				return Optional.of(state);
-			}
-		}
-		return Optional.empty();
-	}
+    /**
+     * Преобразует строковое представление состояния бронирования в соответствующий объект {@link BookingState}.
+     *
+     * @param stringState строковое представление состояния бронирования
+     * @return {@link Optional} содержащий соответствующее состояние {@link BookingState}, если оно существует,
+     * или {@link Optional#empty()} если состояние не найдено.
+     */
+    public static Optional<BookingState> from(String stringState) {
+        return Stream.of(values())
+                .filter(state -> state.name().equalsIgnoreCase(stringState))
+                .findFirst();
+    }
 }

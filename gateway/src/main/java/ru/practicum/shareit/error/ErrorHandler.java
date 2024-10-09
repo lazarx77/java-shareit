@@ -6,7 +6,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.practicum.shareit.exception.*;
+import ru.practicum.shareit.exception.ValidationException;
 
 import java.util.Map;
 
@@ -41,7 +41,7 @@ public class ErrorHandler {
         );
     }
 
-     /**
+    /**
      * Обрабатывает любые другие исключения, которые не были перехвачены
      * другими методами.
      *

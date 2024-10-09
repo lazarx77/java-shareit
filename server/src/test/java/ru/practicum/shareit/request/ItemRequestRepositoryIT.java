@@ -15,6 +15,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Интеграционный тестовый класс для проверки функциональности репозитория ItemRequestRepository.
+ */
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
 class ItemRequestRepositoryIT {
@@ -37,8 +40,10 @@ class ItemRequestRepositoryIT {
         user = userRepository.save(new User(1L, "User", "user@example.com"));
         otherUser = userRepository.save(new User(2L, "Other User", "other@example.com"));
 
-        itemRequest1 = itemRequestRepository.save(new ItemRequest(null, "Request 1", user, LocalDateTime.now()));
-        itemRequest2 = itemRequestRepository.save(new ItemRequest(null, "Request 2", otherUser, LocalDateTime.now()));
+        itemRequest1 = itemRequestRepository.save(new ItemRequest(null, "Request 1", user,
+                LocalDateTime.now()));
+        itemRequest2 = itemRequestRepository.save(new ItemRequest(null, "Request 2", otherUser,
+                LocalDateTime.now()));
     }
 
     @Test

@@ -7,7 +7,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * TODO Sprint add-item-requests.
+ * DTO (Data Transfer Object) для представления запроса на предмет.
+ * Содержит информацию о запросе, включая его идентификатор, описание,
+ * дату создания и список связанных предметов.
  */
 @Data
 public class ItemRequestDto {

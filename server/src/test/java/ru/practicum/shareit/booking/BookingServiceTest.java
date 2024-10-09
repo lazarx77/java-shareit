@@ -25,6 +25,9 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Класс тестирования сервиса бронирования (BookingService).
+ */
 @ExtendWith(MockitoExtension.class)
 class BookingServiceTest {
 

@@ -14,6 +14,10 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Тесты для класса ErrorHandler, который обрабатывает различные исключения
+ * и формирует соответствующие ответы.
+ */
 @ExtendWith(MockitoExtension.class)
 class ErrorHandlerTest {
 

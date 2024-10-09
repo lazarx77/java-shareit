@@ -15,7 +15,14 @@ import ru.practicum.shareit.exception.ValidationException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
-
+/**
+ * Контроллер для управления бронированиями.
+ * <p>
+ * Этот контроллер обрабатывает HTTP-запросы, связанные с бронированием предметов,
+ * включая создание бронирования, изменение статуса, получение информации о бронированиях
+ * и получение бронирований владельца.
+ * </p>
+ */
 @Controller
 @RequestMapping(path = "/bookings")
 @RequiredArgsConstructor
@@ -24,6 +31,14 @@ import java.time.temporal.ChronoUnit;
 public class BookingController {
     private final BookingClient bookingClient;
 
+    /**
+     * Создает новое бронирование для указанного пользователя.
+     *
+     * @param userId     идентификатор пользователя, создающего бронирование
+     * @param requestDto DTO с данными о бронировании
+     * @return ResponseEntity с результатом операции
+     * @throws ValidationException если время начала или окончания бронирования некорректно
+     */
     @PostMapping
     public ResponseEntity<Object> bookItem(@Positive @RequestHeader("X-Sharer-User-Id") long userId,
                                            @Validated @RequestBody BookItemRequestDto requestDto) {
@@ -39,6 +54,14 @@ public class BookingController {
         return bookingClient.bookItem(userId, requestDto);
     }
 
+    /**
+     * Изменяет статус существующего бронирования.
+     *
+     * @param id       идентификатор бронирования
+     * @param approved новый статус одобрения
+     * @param userId   идентификатор пользователя, изменяющего статус
+     * @return ResponseEntity с результатом операции
+     */
     @PatchMapping("/{bookingId}")
     public ResponseEntity<Object> changeStatus(@Positive @PathVariable("bookingId") long id,
                                                @RequestParam boolean approved,
@@ -47,6 +70,13 @@ public class BookingController {
         return bookingClient.changeStatus(id, approved, userId);
     }
 
+    /**
+     * Получает информацию о конкретном бронировании по его идентификатору.
+     *
+     * @param userId    идентификатор пользователя
+     * @param bookingId идентификатор бронирования
+     * @return ResponseEntity с результатом операции
+     */
     @GetMapping("/{bookingId}")
     public ResponseEntity<Object> getBooking(@Positive @RequestHeader("X-Sharer-User-Id") long userId,
                                              @Positive @PathVariable Long bookingId) {
@@ -54,6 +84,15 @@ public class BookingController {
         return bookingClient.getBooking(userId, bookingId);
     }
 
+    /**
+     * Получает список бронирований для указанного пользователя с заданным состоянием.
+     *
+     * @param userId     идентификатор пользователя
+     * @param stateParam состояние бронирования
+     * @param from       индекс первого элемента для пагинации
+     * @param size       количество элементов на странице
+     * @return ResponseEntity с результатом операции
+     */
     @GetMapping
     public ResponseEntity<Object> getBookings(@Positive @RequestHeader("X-Sharer-User-Id") long userId,
                                               @RequestParam(name = "state", defaultValue = "all") String stateParam,
@@ -67,6 +106,13 @@ public class BookingController {
         return bookingClient.getBookings(userId, state, from, size);
     }
 
+    /**
+     * Получает список бронирований, принадлежащих владельцу, с заданным состоянием.
+     *
+     * @param userId     идентификатор владельца
+     * @param stateParam состояние бронирования
+     * @return ResponseEntity с результатом операции
+     */
     @GetMapping("/owner")
     public ResponseEntity<Object> getBookingsOFOwner(@Positive @RequestHeader("X-Sharer-User-Id") Long userId,
                                                      @RequestParam(name = "state", defaultValue = "all")

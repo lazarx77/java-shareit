@@ -26,6 +26,9 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * Класс BookingServiceIT содержит интеграционные тесты для сервиса бронирования (BookingService).
+ */
 @SpringBootTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 @ActiveProfiles("test")
@@ -178,7 +181,8 @@ public class BookingServiceIT {
 
         Booking booking = bookingService.addBooking(bookingAddDto, user1.getId());
 
-        assertThrows(ItemDoNotBelongToUser.class, () -> bookingService.changeStatus(booking.getId(), true, savedUser2.getId()));
+        assertThrows(ItemDoNotBelongToUser.class, () ->
+                bookingService.changeStatus(booking.getId(), true, savedUser2.getId()));
     }
 
     @Test
@@ -275,7 +279,8 @@ public class BookingServiceIT {
 
         Booking booking = bookingService.addBooking(bookingAddDto, user2.getId());
 
-        assertThrows(ItemDoNotBelongToUser.class, () -> bookingService.findSpecificBooking(booking.getId(), savedUser3.getId()));
+        assertThrows(ItemDoNotBelongToUser.class, () ->
+                bookingService.findSpecificBooking(booking.getId(), savedUser3.getId()));
     }
 
     @Test

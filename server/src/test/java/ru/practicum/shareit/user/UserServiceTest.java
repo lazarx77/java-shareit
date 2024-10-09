@@ -15,6 +15,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
+/**
+ * Тестовый класс для проверки функциональности сервиса UserService.
+ */
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 

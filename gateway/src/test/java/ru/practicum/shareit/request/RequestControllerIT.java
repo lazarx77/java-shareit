@@ -20,6 +20,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/**
+ * Интеграционные тесты для контроллера запросов.
+ * Проверяет корректность обработки запросов к API запросов на предметы.
+ */
 @WebMvcTest(RequestController.class)
 class RequestControllerIT {
 

@@ -5,6 +5,9 @@ import ru.practicum.shareit.user.model.User;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Тестовый класс для проверки функциональности маппера UserMapper.
+ */
 class UserMapperTest {
 
     @Test

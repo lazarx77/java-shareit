@@ -30,6 +30,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Тестовый класс для проверки функциональности сервиса ItemService.
+ */
 @Slf4j
 @SpringBootTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
@@ -66,13 +69,13 @@ class ItemServiceIT {
         commentRepository.deleteAll();
         bookingRepository.deleteAll();
         itemRequestRepository.deleteAll();
-//        user = new User(1L, "User", "user@example.com");
         user = userService.addUser(new User(null, "User", "user@example.com"));
     }
 
     @Test
     void addNewItem_whenItemIsValid_itemIsSaved() {
-        ItemDto itemDto = new ItemDto(null, "Test Item", "Test Description", true, null, null, null, null);
+        ItemDto itemDto = new ItemDto(null, "Test Item", "Test Description",
+                true, null, null, null, null);
         Item item = itemService.addNewItem(user.getId(), itemDto);
 
         assertThat(item).isNotNull();
@@ -84,10 +87,12 @@ class ItemServiceIT {
 
     @Test
     void updateItem_whenItemExists_itemIsUpdated() {
-        ItemDto itemDto = new ItemDto(null, "Test Item", "Test Description", true, null, null, null, null);
+        ItemDto itemDto = new ItemDto(null, "Test Item", "Test Description", true,
+                null, null, null, null);
         Item item = itemService.addNewItem(user.getId(), itemDto);
 
-        ItemDto updatedItemDto = new ItemDto(null, "Updated Item", "Updated Description", false, null, null, null, null);
+        ItemDto updatedItemDto = new ItemDto(null, "Updated Item", "Updated Description",
+                false, null, null, null, null);
         Item updatedItem = itemService.updateItem(user.getId(), item.getId(), updatedItemDto);
 
         assertThat(updatedItem.getName()).isEqualTo("Updated Item");
@@ -97,7 +102,8 @@ class ItemServiceIT {
 
     @Test
     void getItem_whenItemExists_itemIsReturned() {
-        ItemDto itemDto = new ItemDto(null, "Test Item", "Test Description", true, null, null, null, null);
+        ItemDto itemDto = new ItemDto(null, "Test Item", "Test Description",
+                true, null, null, null, null);
         Item item = itemService.addNewItem(user.getId(), itemDto);
 
         Item foundItem = itemService.getItem(item.getId());
@@ -108,8 +114,10 @@ class ItemServiceIT {
 
     @Test
     void getAllItemsOfOwner_whenOwnerHasItems_listOfItemsIsReturned() {
-        ItemDto itemDto1 = new ItemDto(null, "Item 1", "Description 1", true, null, null, null, null);
-        ItemDto itemDto2 = new ItemDto(null, "Item 2", "Description 2", true, null, null, null, null);
+        ItemDto itemDto1 = new ItemDto(null, "Item 1", "Description 1",
+                true, null, null, null, null);
+        ItemDto itemDto2 = new ItemDto(null, "Item 2", "Description 2",
+                true, null, null, null, null);
         itemService.addNewItem(user.getId(), itemDto1);
         itemService.addNewItem(user.getId(), itemDto2);
 
@@ -121,7 +129,8 @@ class ItemServiceIT {
     @SneakyThrows
     @Test
     void addComment_whenCommentIsValid_commentIsAdded() {
-        ItemDto itemDto = new ItemDto(null, "Test Item", "Test Description", true, null, null, null, null);
+        ItemDto itemDto = new ItemDto(null, "Test Item", "Test Description",
+                true, null, null, null, null);
         Item item = itemService.addNewItem(user.getId(), itemDto);
 
         User booker = userService.addUser(new User(null, "Booker", "booker@example.com"));
@@ -151,7 +160,8 @@ class ItemServiceIT {
     @SneakyThrows
     @Test
     void getComments_whenItemHasComments_listOfCommentsIsReturned() {
-        ItemDto itemDto = new ItemDto(null, "Test Item", "Test Description", true, null, null, null, null);
+        ItemDto itemDto = new ItemDto(null, "Test Item", "Test Description",
+                true, null, null, null, null);
         Item item = itemService.addNewItem(user.getId(), itemDto);
 
         User booker = userService.addUser(new User(null, "Booker", "booker@example.com"));
@@ -185,8 +195,10 @@ class ItemServiceIT {
         itemRequest.setCreated(LocalDateTime.now());
         itemRequest = itemRequestRepository.save(itemRequest);
 
-        ItemDto itemDto1 = new ItemDto(null, "Available Item", "Description", true, null, null, null, itemRequest.getId());
-        ItemDto itemDto2 = new ItemDto(null, "Unavailable Item", "Description", false, null, null, null, itemRequest.getId());
+        ItemDto itemDto1 = new ItemDto(null, "Available Item", "Description",
+                true, null, null, null, itemRequest.getId());
+        ItemDto itemDto2 = new ItemDto(null, "Unavailable Item", "Description",
+                false, null, null, null, itemRequest.getId());
         itemService.addNewItem(user.getId(), itemDto1);
         itemService.addNewItem(user.getId(), itemDto2);
 
@@ -204,8 +216,10 @@ class ItemServiceIT {
         itemRequest.setCreated(LocalDateTime.now());
         itemRequest = itemRequestRepository.save(itemRequest);
 
-        ItemDto itemDto1 = new ItemDto(null, "Item 1", "Description 1", true, null, null, null, itemRequest.getId());
-        ItemDto itemDto2 = new ItemDto(null, "Item 2", "Description 2", true, null, null, null, itemRequest.getId());
+        ItemDto itemDto1 = new ItemDto(null, "Item 1", "Description 1",
+                true, null, null, null, itemRequest.getId());
+        ItemDto itemDto2 = new ItemDto(null, "Item 2", "Description 2",
+                true, null, null, null, itemRequest.getId());
         itemService.addNewItem(user.getId(), itemDto1);
         itemService.addNewItem(user.getId(), itemDto2);
 
@@ -225,52 +239,57 @@ class ItemServiceIT {
         commentDto.setText("Great item!");
 
         assertThrows(NotFoundException.class, () -> {
-            itemService.addComment(booker.getId(), 999L, commentDto); // 999L - несуществующий ID предмета
+            itemService.addComment(booker.getId(), 999L, commentDto);
         });
     }
 
     @Test
     void addComment_whenUserNotFound_throwsNotFoundException() {
-        ItemDto itemDto = new ItemDto(null, "Test Item", "Test Description", true, null, null, null, null);
+        ItemDto itemDto = new ItemDto(null, "Test Item", "Test Description",
+                true, null, null, null, null);
         Item item = itemService.addNewItem(user.getId(), itemDto);
 
         CommentDto commentDto = new CommentDto();
         commentDto.setText("Great item!");
 
         assertThrows(NotFoundException.class, () -> {
-            itemService.addComment(999L, item.getId(), commentDto); // 999L - несуществующий ID пользователя
+            itemService.addComment(999L, item.getId(), commentDto);
         });
     }
 
     @Test
     void updateItem_whenItemNotFound_throwsNotFoundException() {
-        ItemDto itemDto = new ItemDto(null, "Test Item", "Test Description", true, null, null, null, null);
+        ItemDto itemDto = new ItemDto(null, "Test Item", "Test Description",
+                true, null, null, null, null);
         itemService.addNewItem(user.getId(), itemDto);
 
-        ItemDto updatedItemDto = new ItemDto(null, "Updated Item", "Updated Description", false, null, null, null, null);
+        ItemDto updatedItemDto = new ItemDto(null, "Updated Item", "Updated Description",
+                false, null, null, null, null);
 
         assertThrows(NotFoundException.class, () -> {
-            itemService.updateItem(user.getId(), 999L, updatedItemDto); // 999L - несуществующий ID предмета
+            itemService.updateItem(user.getId(), 999L, updatedItemDto);
         });
     }
 
     @Test
     void updateItem_whenUserNotOwner_throwsValidationException() {
-        ItemDto itemDto = new ItemDto(null, "Test Item", "Test Description", true, null, null, null, null);
+        ItemDto itemDto = new ItemDto(null, "Test Item", "Test Description",
+                true, null, null, null, null);
         Item item = itemService.addNewItem(user.getId(), itemDto);
         User anotherUser = userService.addUser(new User(null, "Another User", "another@example.com"));
 
-        ItemDto updatedItemDto = new ItemDto(null, "Updated Item", "Updated Description", false, null, null, null, null);
+        ItemDto updatedItemDto = new ItemDto(null, "Updated Item", "Updated Description",
+                false, null, null, null, null);
 
         assertThrows(ItemDoNotBelongToUser.class, () -> {
-            itemService.updateItem(anotherUser.getId(), item.getId(), updatedItemDto); // другой пользователь пытается обновить предмет
+            itemService.updateItem(anotherUser.getId(), item.getId(), updatedItemDto);
         });
     }
 
     @Test
     void getItem_whenItemNotFound_throwsNotFoundException() {
         assertThrows(NotFoundException.class, () -> {
-            itemService.getItem(999L); // 999L - несуществующий ID предмета
+            itemService.getItem(999L);
         });
     }
 

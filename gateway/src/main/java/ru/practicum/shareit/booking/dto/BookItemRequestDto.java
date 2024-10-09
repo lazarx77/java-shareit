@@ -7,6 +7,14 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+/**
+ * DTO (Data Transfer Object) для запроса на бронирование предмета.
+ * <p>
+ * Этот класс используется для передачи данных о запросе на бронирование,
+ * включая время начала и окончания бронирования, а также идентификатор
+ * бронируемого предмета.
+ * </p>
+ */
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor

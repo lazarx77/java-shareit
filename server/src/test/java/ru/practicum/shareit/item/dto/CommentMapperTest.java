@@ -8,6 +8,10 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Тесты для класса CommentMapper, который отвечает за преобразование
+ * объектов Comment в CommentDto.
+ */
 class CommentMapperTest {
 
     @Test

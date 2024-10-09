@@ -17,6 +17,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
+/**
+ * Тестовый класс для проверки функциональности мапперов BookingMapper.
+ * <p>
+ * Этот класс содержит тесты, которые проверяют корректность преобразования объектов
+ * Booking в различные DTO и обратно. Используется Mockito для создания моков зависимостей.
+ */
 @ExtendWith(MockitoExtension.class)
 class BookingMapperTest {
 
@@ -31,7 +37,8 @@ class BookingMapperTest {
         booking = new Booking();
         booking.setId(1L);
         booking.setBooker(new User(1L, "John Doe", "john@example.com"));
-        booking.setItem(new Item(1L, "Test Item", "Test Description", true, owner, null));
+        booking.setItem(new Item(1L, "Test Item", "Test Description", true, owner,
+                null));
         booking.setStatus(Status.APPROVED);
         booking.setStart(LocalDateTime.now().minusDays(1));
         booking.setEnd(LocalDateTime.now().plusDays(1));

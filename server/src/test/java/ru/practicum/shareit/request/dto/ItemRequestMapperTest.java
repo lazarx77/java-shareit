@@ -2,9 +2,10 @@ package ru.practicum.shareit.request.dto;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import ru.practicum.shareit.item.ItemService;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.request.model.ItemRequest;
@@ -17,6 +18,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
+/**
+ * Тестовый класс для проверки функциональности маппера ItemRequestMapper.
+ */
+@ExtendWith(MockitoExtension.class)
 class ItemRequestMapperTest {
 
     @Mock
@@ -29,7 +34,6 @@ class ItemRequestMapperTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
         itemRequest = new ItemRequest();
         itemRequest.setId(1L);
         itemRequest.setCreated(LocalDateTime.now());
@@ -44,7 +48,7 @@ class ItemRequestMapperTest {
         ItemRequest actualItemRequest = ItemRequestMapper.mapToItemRequest(newItemRequestDto);
 
         assertEquals(newItemRequestDto.getDescription(), actualItemRequest.getDescription());
-        assertEquals(LocalDateTime.now().getDayOfYear(), actualItemRequest.getCreated().getDayOfYear()); // Проверка только по дню
+        assertEquals(LocalDateTime.now().getDayOfYear(), actualItemRequest.getCreated().getDayOfYear());
     }
 
     @Test

@@ -1,0 +1,16 @@
+ru.practicum.shareit
+ru.practicum.shareit.booking
+ru.practicum.shareit.booking.dto
+ru.practicum.shareit.booking.model
+ru.practicum.shareit.client
+ru.practicum.shareit.error
+ru.practicum.shareit.exception
+ru.practicum.shareit.item
+ru.practicum.shareit.item.dto
+ru.practicum.shareit.item.model
+ru.practicum.shareit.request
+ru.practicum.shareit.request.dto
+ru.practicum.shareit.request.model
+ru.practicum.shareit.user
+ru.practicum.shareit.user.dto
+ru.practicum.shareit.user.model

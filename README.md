@@ -16,6 +16,8 @@
 * Язык программирования: Java Amazon Corretto 21
 * Фреймворк: Spring Boot
 * База данных: PostgresSQL
+* Docker
+* Docker-compose
 
 ## Автор
 Олег Лазаренко
